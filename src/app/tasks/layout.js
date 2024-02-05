@@ -1,6 +1,6 @@
-import IconButton from "@/components/iconButton";
-import MainContent from "@/components/mainContent";
-import Sidebar from "@/components/sidebar";
+import IconButton from "@/components/shared/iconButton";
+import MainContent from "@/components/shared/mainContent";
+import Sidebar from "@/components/shared/sidebar";
 import { PlusIcon } from "@heroicons/react/24/solid";
 
 export default function TasksLayout({ children }) {
