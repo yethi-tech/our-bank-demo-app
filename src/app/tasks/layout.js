@@ -8,7 +8,9 @@ export default function TasksLayout({ children }) {
     <div className="h-full overflow-hidden flex flex-row">
       <Sidebar
         title="Tasks"
-        titleAction={<IconButton icon={<PlusIcon />} title="New Task" />}
+        titleAction={
+          <IconButton id="new_task" icon={<PlusIcon />} title="New Task" />
+        }
       />
       <MainContent>{children}</MainContent>
     </div>
