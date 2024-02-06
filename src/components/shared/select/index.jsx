@@ -5,6 +5,27 @@ import PropTypes from "prop-types";
 import { Listbox, Transition } from "@headlessui/react";
 import { FaCheck, FaChevronDown } from "react-icons/fa";
 
+const getLabel = (option, by, labelKey) => {
+  if (!option) return null;
+  if (typeof option === "object") {
+    if (labelKey) {
+      let possibleLabel = option[labelKey];
+      if (typeof possibleLabel === "object") {
+        console.error(
+          "The `labelKey` for an option must return a string, but returned an object"
+        );
+        return option[by];
+      } else {
+        return possibleLabel;
+      }
+    } else {
+      return option[by];
+    }
+  } else {
+    return option;
+  }
+};
+
 const Select = ({
   label,
   id,
@@ -12,12 +33,23 @@ const Select = ({
   defaultValue,
   isRequired,
   value,
+  labelKey,
   onChange,
   placeholder = "Select One",
-  options,
+  options = [],
   by,
 }) => {
   const [selected, setSelected] = useState(value || defaultValue);
+
+  let optionsAreObjects =
+    options.length > 0 ? typeof options[0] === "object" : false;
+
+  if (optionsAreObjects && !by) {
+    console.error(
+      "Missing `by` prop to the Select component when options are objects"
+    );
+    throw "Missing `by` prop to the Select component when options are objects";
+  }
 
   const handleChange = (newValue) => {
     if (onChange) {
@@ -51,7 +83,7 @@ const Select = ({
             <div className="relative mt-0">
               <Listbox.Button className="relative w-full cursor-default rounded-md bg-white pt-2 pb-1.5 pl-3 pr-10 text-left shadow-sm border sm:text-sm">
                 <span className="block truncate">
-                  {selected || placeholder}
+                  {getLabel(selected, by, labelKey) || placeholder}
                 </span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <FaChevronDown aria-hidden="true" />
@@ -83,7 +115,7 @@ const Select = ({
                               selected ? "font-medium" : "font-normal"
                             }`}
                           >
-                            {by ? option[by] : option}
+                            {getLabel(option, by, labelKey)}
                           </span>
                           {selected ? (
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-tenjin-primary">

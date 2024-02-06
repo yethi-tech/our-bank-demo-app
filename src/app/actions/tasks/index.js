@@ -18,12 +18,11 @@ export async function createTodo(prevState, formData) {
   }
 }
 
-export async function getTasks(pageSize, currentPage, sort) {
+export async function getTasks(pageSize, currentPage, sort, criteria) {
   try {
-    const result = await searchTasks(pageSize, currentPage, sort);
+    const result = await searchTasks(pageSize, currentPage, sort, criteria);
     return { success: true, data: result };
   } catch (error) {
-    // return { success: false, data: "Couldn't complete search" };
     throw error;
   }
 }

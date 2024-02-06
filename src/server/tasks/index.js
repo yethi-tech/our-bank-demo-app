@@ -15,14 +15,31 @@ export const getTasks = async (
   page = 1,
   sort = {
     createdAt: "desc",
-  }
+  },
+  filter = {}
 ) => {
   const skip = (page - 1) * limit;
+
+  const where = {};
+
+  if (filter.id && filter.id.length > 0) {
+    where.id = {
+      in: filter.id,
+    };
+  }
+
+  if (filter.priority && filter.priority.length > 0) {
+    where.priority = {
+      in: filter.priority,
+    };
+  }
+
   try {
     const todos = await prisma.todo.findMany({
       take: limit,
       skip: skip,
       orderBy: sort,
+      where,
     });
 
     const totalRecords = await prisma.todo.count();
