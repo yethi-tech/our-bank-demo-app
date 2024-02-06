@@ -6,6 +6,7 @@ import Skeleton from "./Skeleton";
 import Error from "@/components/shared/error";
 import TasksTable from "../table";
 import Pagination from "@/components/shared/pagination";
+import Search from "./Search";
 
 const TasksList = () => {
   const [tasks, setTasks] = useState({});
@@ -62,7 +63,10 @@ const TasksList = () => {
       className="h-full overflow-hidden flex flex-col"
       id="tasks_list_wrapper"
     >
-      <div id="pagination_container">
+      <div id="search_container" className="my-2">
+        <Search />
+      </div>
+      <div id="pagination_container" className="my-2 py-2">
         <div id="pagination_container">
           <Pagination
             pageSize={5}
