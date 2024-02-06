@@ -3,6 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Moment from "react-moment";
 import Table from "@/components/shared/table";
+import Pagination from "@/components/shared/pagination";
 
 const columns = [
   {
@@ -36,17 +37,7 @@ const TasksTable = ({ tasks }) => {
   }
 
   return (
-    <div id="tasks_table_wrapper">
-      <div id="table_container">
-        <Table
-          id="tasks_table"
-          columns={columns}
-          data={tasks.data}
-          size="small"
-        />
-      </div>
-      <div id="pagination_container"></div>
-    </div>
+    <Table id="tasks_table" columns={columns} data={tasks.data} size="large" />
   );
 };
 

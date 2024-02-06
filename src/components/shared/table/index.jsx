@@ -3,7 +3,7 @@
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
-const Table = ({ data, columns, size = "medium", id }) => {
+const Table = ({ data, columns, size = "medium", id, stickyHeader = true }) => {
   const renderCell = (row, column) => {
     if (column.render) {
       return column.render(row);
@@ -32,6 +32,10 @@ const Table = ({ data, columns, size = "medium", id }) => {
                   "px-2 py-1 text-xs": size === "small",
                   "px-2 py-2 text-sm": size === "medium",
                   "px-2 py-4 text-base": size === "large",
+                },
+                {
+                  "sticky top-0 bg-white z-10 border-b border-gray-300 shadow-lg":
+                    stickyHeader,
                 }
               )}
               style={{
