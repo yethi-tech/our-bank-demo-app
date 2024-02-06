@@ -10,28 +10,37 @@ export const createTask = async (task) => {
   }
 };
 
-export const getTasks = async () => {
+export const getTasks = async (
+  limit = 5,
+  page = 1,
+  sort = {
+    createdAt: "desc",
+  }
+) => {
+  const skip = (page - 1) * limit;
   try {
-    const todos = await prisma.todo.findMany();
-    return todos;
+    const todos = await prisma.todo.findMany({
+      take: limit,
+      skip: skip,
+      orderBy: sort,
+    });
+
+    const totalRecords = await prisma.todo.count();
+    const totalPages = Math.ceil(totalRecords / limit);
+    return { data: todos, totalRecords, totalPages };
   } catch (error) {
     throw error;
   }
 };
 
-export const getAllTasks = async (
-  cursor,
-  limit = 5,
-  sort = [{ createdAt: "asc" }]
-) => {
+export const getTasksProjection = async (pageSize) => {
   try {
-    const todos = await prisma.todo.findMany({
-      take: limit,
-      cursor: cursor ? cursor : undefined,
-      skip: cursor ? 1 : 0,
-      orderBy: sort,
-    });
-    return todos;
+    const totalRecords = await prisma.todo.count();
+    const totalPages = Math.ceil(totalRecords / pageSize);
+    return {
+      totalRecords,
+      totalPages,
+    };
   } catch (error) {
     throw error;
   }

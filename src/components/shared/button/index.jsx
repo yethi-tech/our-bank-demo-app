@@ -24,15 +24,20 @@ const iconSet = {
   home: <FaHome />,
   refresh: <FaArrowRotateRight />,
 };
-
+// Button.defaultProps = {
+//   size: "medium",
+//   color: "primary",
+//   variant: "text",
+//   type: "button",
+// };
 const Button = ({
   children,
   id,
   name,
-  type,
-  size,
-  color,
-  variant,
+  type = "button",
+  size = "medium",
+  color = "primary",
+  variant = "text",
   icon,
   loading,
   loadingText,
@@ -164,13 +169,6 @@ Button.propTypes = {
     "refresh",
     "home",
   ]),
-};
-
-Button.defaultProps = {
-  size: "medium",
-  color: "primary",
-  variant: "text",
-  type: "button",
 };
 
 export default Button;

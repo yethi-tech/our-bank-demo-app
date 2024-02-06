@@ -1,28 +1,24 @@
-// import { useEffect, useState } from "react";
-
 import Button from "@/components/shared/button";
-import { getAllTasks, getTasks } from "@/server/tasks";
+import PageContent from "@/components/shared/pageContent";
+import PageHeader from "@/components/shared/pageHeader";
 import Link from "next/link";
+import { Suspense } from "react";
 import { FaFileCsv } from "react-icons/fa";
+import TasksList from "../components/tasks/list";
+import Skeleton from "../components/tasks/list/Skeleton";
 
 export default async function Tasks() {
-  let loading = true;
   try {
-    const todos = await getAllTasks();
-    loading = false;
     return (
       <div
         className="h-full overflow-hidden p-4 flex flex-col"
         id="tasks_list_page"
       >
-        <div className="py-2 flex flex-row items-center" id="page_header">
-          <div className="grow">
-            <p className="text-lg font-semibold">Pending Tasks</p>
-          </div>
-          <div
-            id="page_actions"
-            className="flex flex-row items-center justify-start gap-1"
-          >
+        <PageHeader
+          title="Tasks"
+          subTitle={"Tasks that need to be done"}
+          id="page_header"
+          actions={[
             <Button
               variant="contained"
               size="small"
@@ -30,15 +26,25 @@ export default async function Tasks() {
               icon="plus"
               as={Link}
               href="/tasks/new"
+              key="newTask"
             >
               Create Task
-            </Button>
-            <Button size="small" id="btn_create_task" icon={<FaFileCsv />}>
+            </Button>,
+            <Button
+              size="small"
+              key="exportToCsv"
+              id="btn_create_task"
+              icon={<FaFileCsv />}
+            >
               Export to CSV
-            </Button>
-          </div>
-        </div>
-        <div id="content"></div>
+            </Button>,
+          ]}
+        />
+        <PageContent id="content" fillHeight>
+          <Suspense fallback={<Skeleton />}>
+            <TasksList />
+          </Suspense>
+        </PageContent>
       </div>
     );
   } catch (error) {
