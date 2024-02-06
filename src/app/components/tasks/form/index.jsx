@@ -123,14 +123,10 @@ const AddForm = ({ onCancel }) => {
             </div>
           </div>
 
-          <div className="mt-6 flex items-center justify-end gap-x-6">
-            <button
-              type="button"
-              className="text-sm font-semibold leading-6 text-gray-900"
-              onClick={handleCancel}
-            >
+          <div className="mt-6 flex items-center justify-end gap-1">
+            <Button type="button" onClick={handleCancel}>
               Cancel
-            </button>
+            </Button>
             <SubmitButton />
           </div>
         </form>

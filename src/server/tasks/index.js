@@ -18,3 +18,21 @@ export const getTasks = async () => {
     throw error;
   }
 };
+
+export const getAllTasks = async (
+  cursor,
+  limit = 5,
+  sort = [{ createdAt: "asc" }]
+) => {
+  try {
+    const todos = await prisma.todo.findMany({
+      take: limit,
+      cursor: cursor ? cursor : undefined,
+      skip: cursor ? 1 : 0,
+      orderBy: sort,
+    });
+    return todos;
+  } catch (error) {
+    throw error;
+  }
+};

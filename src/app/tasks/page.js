@@ -1,14 +1,14 @@
 // import { useEffect, useState } from "react";
 
 import Button from "@/components/shared/button";
-import { getTasks } from "@/server/tasks";
+import { getAllTasks, getTasks } from "@/server/tasks";
 import Link from "next/link";
 import { FaFileCsv } from "react-icons/fa";
 
 export default async function Tasks() {
   let loading = true;
   try {
-    const todos = await getTasks();
+    const todos = await getAllTasks();
     loading = false;
     return (
       <div
