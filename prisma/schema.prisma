@@ -21,16 +21,67 @@ model Todo {
 }
 
 model User {
-  id            Int    @id @default(autoincrement())
-  userId        String    @unique
-  name          String?
-  email         String?   @unique
-  password      String?
-  image         String?
+  id              Int        @id @default(autoincrement())
+  userId          String     @unique
+  name            String?
+  email           String?    @unique
+  password        String?
+  image           String?
   hasBranchAccess Boolean
-  hasAdminAccess Boolean
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  hasAdminAccess  Boolean
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  Customer        Customer[]
 }
 
+model Address {
+  id           Int       @id @default(autoincrement())
+  customer     Customer? @relation(fields: [customerId], references: [id])
+  customerId   Int
+  type         String
+  line1        String
+  line2        String?
+  line3        String?
+  city         String
+  state        String
+  zipCode      String
+  country      String
+  phoneIsdCode String
+  phoneNumber  String
+}
 
+model Passport {
+  id             Int       @id @default(autoincrement())
+  customer       Customer?
+  passportNumber String
+  issueDate      String
+  expiryDate     String
+  issuingCountry String
+}
+
+model Customer {
+  id                    Int       @id @default(autoincrement())
+  customerId            String    @unique
+  fullName              String
+  shortName             String    @unique
+  type                  String
+  branchCode            Int
+  prefix                String?
+  firstName             String?
+  middleName            String?
+  lastName              String?
+  gender                String
+  udid                  String    @unique
+  dateOfBirth           DateTime
+  addresses             Address[]
+  residentStatus        String
+  passport              Passport? @relation(fields: [passportId], references: [id])
+  passportId            Int?      @unique
+  authStatus            String
+  relationshipManager   User?     @relation(fields: [relationshipManagerId], references: [id])
+  relationshipManagerId Int
+  maker                 String
+  minor                 Boolean
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
