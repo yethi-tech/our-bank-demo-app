@@ -6,31 +6,32 @@ import {
 } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { cloneElement } from "react";
+import { FaFile, FaList, FaMoneyBill, FaUsers } from "react-icons/fa";
 
 const menuItems = [
   {
     text: "Customers",
     id: "customers",
     href: "/branch/customers",
-    icon: <UsersIcon />,
+    icon: <FaUsers />,
   },
   {
     text: "Tasks",
     id: "tasks",
-    icon: <ListBulletIcon />,
+    icon: <FaList />,
     href: "/branch/tasks",
   },
   {
     text: "Accounts",
     id: "accounts",
     href: "/branch/accounts",
-    icon: <ClipboardDocumentListIcon />,
+    icon: <FaFile />,
   },
   {
     text: "Transactions",
     id: "transactions",
     href: "/branch/transactions",
-    icon: <BanknotesIcon />,
+    icon: <FaMoneyBill />,
   },
 ];
 
