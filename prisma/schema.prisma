@@ -20,4 +20,17 @@ model Todo {
   updatedAt   DateTime @updatedAt
 }
 
+model User {
+  id            Int    @id @default(autoincrement())
+  userId        String    @unique
+  name          String?
+  email         String?   @unique
+  password      String?
+  image         String?
+  hasBranchAccess Boolean
+  hasAdminAccess Boolean
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
 

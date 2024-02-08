@@ -1,44 +1,13 @@
 "use client";
 
-import {
-  BanknotesIcon,
-  ClipboardDocumentListIcon,
-  HomeIcon,
-  ListBulletIcon,
-  UsersIcon,
-} from "@heroicons/react/24/solid";
+import { signOut } from "next-auth/react";
 import MenuItem from "./MenuItem";
 import UserAvatar from "./UserAvatar";
 
-const navItems = [
-  {
-    text: "Home",
-    id: "home",
-    href: "/",
-    icon: <HomeIcon />,
-  },
-  {
-    text: "Customers",
-    id: "customers",
-    href: "/customers",
-    icon: <UsersIcon />,
-  },
-  { text: "Tasks", id: "tasks", icon: <ListBulletIcon />, href: "/tasks" },
-  {
-    text: "Accounts",
-    id: "accounts",
-    href: "/accounts",
-    icon: <ClipboardDocumentListIcon />,
-  },
-  {
-    text: "Transactions",
-    id: "transactions",
-    href: "/transactions",
-    icon: <BanknotesIcon />,
-  },
-];
-
-const AppBar = () => {
+const AppBar = ({ navItems, user }) => {
+  const onSignOut = () => {
+    signOut();
+  };
   return (
     <nav className="bg-white drop-shadow-md" id="tjn_navbar">
       <div
@@ -60,7 +29,7 @@ const AppBar = () => {
             ))}
           </div>
           <div id="tjn_navbar_right" className="flex items-center">
-            <UserAvatar />
+            <UserAvatar onSignOut={onSignOut} user={user} />
           </div>
         </div>
       </div>

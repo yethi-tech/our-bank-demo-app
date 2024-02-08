@@ -34,12 +34,12 @@ const AddForm = ({ onCancel }) => {
 
   const handleCancel = () => {
     if (window.confirm(CONFIRM_CANCEL)) {
-      router.push(`/tasks`);
+      router.push(`/branch/tasks`);
     }
   };
 
   const handleSuccessClose = () => {
-    router.push("/tasks");
+    router.push("/branch/tasks");
   };
 
   const { success, message } = state;
