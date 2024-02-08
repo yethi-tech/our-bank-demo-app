@@ -1,8 +1,10 @@
 import AppBar from "@/components/shared/topbar";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { cloneElement } from "react";
 import { AiFillBank } from "react-icons/ai";
 import { FaCog } from "react-icons/fa";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
 const menuItems = [
   {
@@ -19,10 +21,11 @@ const menuItems = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
   return (
     <>
-      <AppBar navItems={menuItems} />
+      <AppBar navItems={menuItems} user={session.user} />
       <div className="main">
         <main id="wrapper" className="flex min-h-full flex-col items-center">
           <div className="container mx-auto">

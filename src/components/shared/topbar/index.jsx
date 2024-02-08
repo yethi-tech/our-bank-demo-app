@@ -4,7 +4,7 @@ import { signOut } from "next-auth/react";
 import MenuItem from "./MenuItem";
 import UserAvatar from "./UserAvatar";
 
-const AppBar = ({ navItems }) => {
+const AppBar = ({ navItems, user }) => {
   const onSignOut = () => {
     signOut();
   };
@@ -29,7 +29,7 @@ const AppBar = ({ navItems }) => {
             ))}
           </div>
           <div id="tjn_navbar_right" className="flex items-center">
-            <UserAvatar onSignOut={onSignOut} />
+            <UserAvatar onSignOut={onSignOut} user={user} />
           </div>
         </div>
       </div>

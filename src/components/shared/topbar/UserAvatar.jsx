@@ -6,14 +6,14 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const UserAvatar = ({ onSignOut }) => {
+const UserAvatar = ({ onSignOut, user }) => {
   return (
     <Menu as="div" className="user-avatar-container relative ml-2">
       <Menu.Button
         id="tjn-user-profile-button"
-        className="relative flex rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+        className="relative flex focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
       >
-        <span className="absolute -inset-1.5" />
+        {/* <span className="absolute -inset-1.5" />
         <span className="sr-only">Open user menu</span>
         <Image
           className="h-8 w-8 rounded-full"
@@ -21,7 +21,8 @@ const UserAvatar = ({ onSignOut }) => {
           alt="Profile Image for sriram sridharan"
           width={32}
           height={32}
-        />
+        /> */}
+        <p className="font-semibold text-tenjin-primary">{user.name}</p>
       </Menu.Button>
       <Transition
         as={Fragment}
