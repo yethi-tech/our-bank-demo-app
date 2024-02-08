@@ -1,6 +1,6 @@
 import { Menu, Transition } from "@headlessui/react";
-import Image from "next/image";
-import React, { Fragment } from "react";
+import { Fragment } from "react";
+import { FaUser } from "react-icons/fa";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -11,18 +11,16 @@ const UserAvatar = ({ onSignOut, user }) => {
     <Menu as="div" className="user-avatar-container relative ml-2">
       <Menu.Button
         id="tjn-user-profile-button"
-        className="relative flex focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+        className="relative flex focus:outline-none focus:ring-2 focus:bg-gray-200 rounded-sm hover:bg-gray-100 px-3 py-2"
       >
-        {/* <span className="absolute -inset-1.5" />
-        <span className="sr-only">Open user menu</span>
-        <Image
-          className="h-8 w-8 rounded-full"
-          src="https://s.gravatar.com/avatar/82865db71cb37bbd9e2753a3402c4058?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fsr.png"
-          alt="Profile Image for sriram sridharan"
-          width={32}
-          height={32}
-        /> */}
-        <p className="font-semibold text-tenjin-primary">{user.name}</p>
+        <div className="flex flex-row items-center">
+          <div className="mr-2 text-sm text-tenjin-primary">
+            <FaUser />
+          </div>
+          <p className="font-semibold text-sm text-tenjin-primary">
+            {user.name}
+          </p>
+        </div>
       </Menu.Button>
       <Transition
         as={Fragment}

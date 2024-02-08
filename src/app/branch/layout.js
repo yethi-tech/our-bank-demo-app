@@ -1,5 +1,7 @@
 import AppBar from "@/components/shared/topbar";
+import { getServerSession } from "next-auth";
 import { FaFile, FaList, FaMoneyBill, FaUsers } from "react-icons/fa";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 const menuItems = [
   {
     text: "Customers",
@@ -27,10 +29,12 @@ const menuItems = [
   },
 ];
 
-export default function BranchLayout({ children }) {
+export default async function BranchLayout({ children }) {
+  const session = await getServerSession(authOptions);
+
   return (
     <div className="inner-layout-main branch-layout">
-      <AppBar navItems={menuItems} />
+      <AppBar navItems={menuItems} user={session.user} />
       <div className="main">{children}</div>
     </div>
   );
