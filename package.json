@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "npx prisma db push && npx prisma generate && next build",
+    "vercel-build": "npm run build && npm run seed",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "npx prisma db push && npx prisma generate",
