@@ -16,8 +16,9 @@ export default function RootLayout({ children }) {
         <title>OurBank Platform</title>
       </head>
       <body className={inter.className}>
-        <TopBar />
-        <div className="main">{children}</div>
+        {/* <TopBar />
+        <div className="main">{children}</div> */}
+        {children}
       </body>
     </html>
   );

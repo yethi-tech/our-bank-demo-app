@@ -6,21 +6,31 @@ import {
 } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { cloneElement } from "react";
-import { AiFillBank } from "react-icons/ai";
-import { FaCog } from "react-icons/fa";
 
 const menuItems = [
   {
-    text: "Branch",
-    id: "branch",
-    href: "/branch",
-    icon: <AiFillBank />,
+    text: "Customers",
+    id: "customers",
+    href: "/branch/customers",
+    icon: <UsersIcon />,
   },
   {
-    text: "Administration",
-    id: "administration",
-    href: "/admin",
-    icon: <FaCog />,
+    text: "Tasks",
+    id: "tasks",
+    icon: <ListBulletIcon />,
+    href: "/branch/tasks",
+  },
+  {
+    text: "Accounts",
+    id: "accounts",
+    href: "/branch/accounts",
+    icon: <ClipboardDocumentListIcon />,
+  },
+  {
+    text: "Transactions",
+    id: "transactions",
+    href: "/branch/transactions",
+    icon: <BanknotesIcon />,
   },
 ];
 

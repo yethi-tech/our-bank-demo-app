@@ -1,11 +1,11 @@
+import TasksList from "@/app/components/tasks/list";
+import Skeleton from "@/app/components/tasks/list/Skeleton";
 import Button from "@/components/shared/button";
 import PageContent from "@/components/shared/pageContent";
 import PageHeader from "@/components/shared/pageHeader";
 import Link from "next/link";
 import { Suspense } from "react";
 import { FaFileCsv } from "react-icons/fa";
-import TasksList from "../components/tasks/list";
-import Skeleton from "../components/tasks/list/Skeleton";
 
 export default async function Tasks() {
   try {
@@ -25,7 +25,7 @@ export default async function Tasks() {
               id="btn_create_task"
               icon="plus"
               as={Link}
-              href="/tasks/new"
+              href="/branch/tasks/new"
               key="newTask"
             >
               Create Task
