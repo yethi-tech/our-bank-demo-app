@@ -6,7 +6,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const UserAvatar = () => {
+const UserAvatar = ({ onSignOut }) => {
   return (
     <Menu as="div" className="user-avatar-container relative ml-2">
       <Menu.Button
@@ -63,6 +63,12 @@ const UserAvatar = () => {
             {({ active }) => (
               <a
                 href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onSignOut) {
+                    onSignOut();
+                  }
+                }}
                 className={classNames(
                   active ? "bg-gray-100" : "",
                   "block px-4 py-2 text-sm text-gray-700"

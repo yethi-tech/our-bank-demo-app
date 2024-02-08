@@ -1,9 +1,13 @@
 "use client";
 
+import { signOut } from "next-auth/react";
 import MenuItem from "./MenuItem";
 import UserAvatar from "./UserAvatar";
 
 const AppBar = ({ navItems }) => {
+  const onSignOut = () => {
+    signOut();
+  };
   return (
     <nav className="bg-white drop-shadow-md" id="tjn_navbar">
       <div
@@ -25,7 +29,7 @@ const AppBar = ({ navItems }) => {
             ))}
           </div>
           <div id="tjn_navbar_right" className="flex items-center">
-            <UserAvatar />
+            <UserAvatar onSignOut={onSignOut} />
           </div>
         </div>
       </div>
