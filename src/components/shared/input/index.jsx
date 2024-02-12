@@ -2,6 +2,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import clsx from "clsx";
 
 const Input = ({
   label,
@@ -17,7 +18,10 @@ const Input = ({
     <div className="tjn_ui_control tjn_form_control w-full">
       <label
         htmlFor={id}
-        className="tjn_form_control__label block text-sm font-medium leading-6 text-gray-900"
+        className={clsx(
+          "tjn_form_control__label block text-sm font-medium leading-6 text-gray-900",
+          { "label-mandatory": isRequired }
+        )}
       >
         {label}
       </label>
@@ -26,9 +30,10 @@ const Input = ({
           <input
             type={type}
             name={name}
+            placeholder={placeholder}
             id={id}
             autoComplete="none"
-            className="block tjn_form_control__control flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+            className="block tjn_form_control__control flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 outline-none sm:text-sm sm:leading-6"
             {...rest}
           />
         </div>
@@ -38,7 +43,7 @@ const Input = ({
 };
 
 Input.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.any,

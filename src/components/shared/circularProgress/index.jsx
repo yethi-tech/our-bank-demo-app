@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 
-const CircularProgress = ({ color, size }) => {
+const CircularProgress = ({ color = "primary", size = "medium" }) => {
   return (
     <div
       className={clsx(
@@ -20,6 +20,7 @@ const CircularProgress = ({ color, size }) => {
           "border-tenjin-error": color === "error",
           "border-tenjin-warning": color === "warning",
           "border-tenjin-info": color === "info",
+          "border-white": color === "white",
         }
       )}
     ></div>
@@ -37,11 +38,6 @@ CircularProgress.propTypes = {
   ]),
 
   size: PropTypes.oneOf(["tiny", "small", "medium", "large", "xlarge"]),
-};
-
-CircularProgress.defaultProps = {
-  size: "medium",
-  color: "primary",
 };
 
 export default CircularProgress;

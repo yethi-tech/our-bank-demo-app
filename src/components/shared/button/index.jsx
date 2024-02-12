@@ -49,7 +49,10 @@ const Button = ({
     if (loading)
       return (
         <div className="mr-2">
-          <CircularProgress size={size} />
+          <CircularProgress
+            size={size}
+            color={variant === "contained" ? "white" : null}
+          />
         </div>
       );
 
@@ -148,8 +151,7 @@ Button.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string,
   type: PropTypes.string,
-  size: PropTypes.oneOf(["tiny", "small", "medium", "large", "xlarge"])
-    .isRequired,
+  size: PropTypes.oneOf(["tiny", "small", "medium", "large", "xlarge"]),
   color: PropTypes.oneOf([
     "primary",
     "default",
@@ -157,8 +159,8 @@ Button.propTypes = {
     "warning",
     "error",
     "success",
-  ]).isRequired,
-  variant: PropTypes.oneOf(["contained", "outlined", "text"]).isRequired,
+  ]),
+  variant: PropTypes.oneOf(["contained", "outlined", "text"]),
   icon: PropTypes.oneOf([
     "save",
     "plus",

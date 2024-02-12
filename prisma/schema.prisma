@@ -46,7 +46,7 @@ model Address {
   state        String
   zipCode      String
   country      String
-  phoneIsdCode String
+  phoneIsdCode String?
   phoneNumber  String
 }
 
