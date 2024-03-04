@@ -10,6 +10,10 @@ export async function createTodo(prevState, formData) {
     priority: formData.get("priority"),
   };
 
+  if (!todo.title) {
+    return { success: false, message: "Title is required" };
+  }
+
   try {
     const newTask = await createTask(todo);
     return { success: true, message: "Created task with ID: " + newTask.id };
