@@ -59,6 +59,14 @@ const AddForm = ({ onCancel }) => {
               </p>
 
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                {state && !state.success && state.message ? (
+                  <div className="mt-5 col-span-full">
+                    <p className="text-tenjin-error">{state.message}</p>
+                  </div>
+                ) : (
+                  <></>
+                )}
+
                 <div className="col-span-full">
                   <label
                     htmlFor="username"
@@ -70,11 +78,47 @@ const AddForm = ({ onCancel }) => {
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 w-full">
                       <input
                         type="text"
-                        name="taskSummary"
+                        name="task_summary"
                         id="taskSummary"
                         autoComplete="none"
                         className="block  flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                        placeholder="A one line summary of your task"
+                        placeholder="Summarize your task"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="col-span-2">
+                  <label
+                    htmlFor="purpose"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    User
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 w-full">
+                      <input
+                        type="text"
+                        autoComplete="none"
+                        className="block  flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                        placeholder="Who is this..."
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="col-span-2">
+                  <label
+                    htmlFor="purpose"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Purpose
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 w-full">
+                      <input
+                        type="text"
+                        autoComplete="none"
+                        className="block  flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                        placeholder="Purpose of life..."
                       />
                     </div>
                   </div>
