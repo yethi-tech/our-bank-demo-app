@@ -56,7 +56,7 @@ model Passport {
   passportNumber String
   issueDate      String
   expiryDate     String
-  issuingCountry String
+  issuingCountry String?
 }
 
 model Customer {

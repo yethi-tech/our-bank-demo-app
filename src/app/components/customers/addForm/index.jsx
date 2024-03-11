@@ -7,6 +7,13 @@ import Input from "@/components/shared/input";
 import Select from "@/components/shared/select";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
+import { createCustomer } from "@/app/actions/customers";
+
+const initialState = {
+  message: "",
+  success: false,
+};
 
 const customerTypes = ["Individual", "Corporate"];
 const countries = [
@@ -16,6 +23,7 @@ const countries = [
 
 const CustomerForm = ({ customer }) => {
   const router = useRouter();
+  const [state, formAction] = useFormState(createCustomer, initialState);
 
   const handleCancel = (e) => {
     e.preventDefault();
@@ -37,15 +45,26 @@ const CustomerForm = ({ customer }) => {
     console.log(postObject);
   };
 
+  const { pending } = useFormStatus();
+
+  const { success, message } = state;
+
   return (
     <div id="form">
-      <form name="customer_form" onSubmit={handleSubmit}>
+      <form name="customer_form" action={formAction}>
         <div className="space-y-4">
           <div>
             <h2 className="text-base font-semibold leading-7 text-gray-900">
               {customer ? "Update Customer" : "New Customer"}
             </h2>
           </div>
+          {!success && message ? (
+            <div className="error-message" id="errorMessage">
+              <p className="text-sm text-tenjin-error">{message}</p>
+            </div>
+          ) : (
+            <></>
+          )}
           <BasicDetails customer={customer} />
           <PersonalDetails customer={customer} />
           <IdentificationDetails customer={customer} />
@@ -54,7 +73,16 @@ const CustomerForm = ({ customer }) => {
             <Button size="small" id="btnCancel" onClick={handleCancel}>
               Cancel
             </Button>
-            <Button size="small" id="btnSave" type="submit" variant="contained">
+            <Button
+              disabled={pending}
+              loading={pending}
+              loadingText="Please wait..."
+              size="small"
+              id="btnSave"
+              type="submit"
+              variant="contained"
+              icon="save"
+            >
               Save
             </Button>
           </div>
