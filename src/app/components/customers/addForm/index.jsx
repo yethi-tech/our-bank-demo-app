@@ -6,7 +6,7 @@ import Checkbox from "@/components/shared/checkbox";
 import Input from "@/components/shared/input";
 import Select from "@/components/shared/select";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 const customerTypes = ["Individual", "Corporate"];
 const countries = [
@@ -163,11 +163,23 @@ const PersonalDetails = ({ customer }) => {
 };
 
 const ContactDetails = ({ customer }) => {
+  const [
+    permenantAddressSameAsContactAddress,
+    setPermanentAddressSameAsContactAddress,
+  ] = useState(true);
+  const onAddressCheckChange = (e) => {
+    setPermanentAddressSameAsContactAddress(e.target.checked);
+  };
   return (
     <div
       id="contact_details"
       className="border p-3 rounded-md w-full grid grid-cols-12 mt-1 gap-x-6 gap-y-4 shadow-md"
     >
+      <input
+        type="hidden"
+        name="permanentAddressSameAsContactAddress"
+        value={permenantAddressSameAsContactAddress}
+      />
       <div className="col-span-4 grid grid-cols-2" id="contact_address_block">
         <div className="col-span-2 mb-3">
           <h4 className="text-sm font-semibold">Current Address</h4>
@@ -179,6 +191,8 @@ const ContactDetails = ({ customer }) => {
           <h4 className="text-sm font-semibold">Permanent Address</h4>
           <div className="ml-3">
             <Checkbox
+              checked={permenantAddressSameAsContactAddress}
+              onChange={onAddressCheckChange}
               label="Same as Current Address"
               id="sameAsCurrentAddress"
               name="sameAsCurrentAddress"
@@ -186,13 +200,17 @@ const ContactDetails = ({ customer }) => {
           </div>
         </div>
 
-        <AddressBlock addressType={"permanent"} customer={customer} />
+        <AddressBlock
+          addressType={"permanent"}
+          customer={customer}
+          disabled={permenantAddressSameAsContactAddress}
+        />
       </div>
     </div>
   );
 };
 
-const AddressBlock = ({ addressType, customer }) => {
+const AddressBlock = ({ addressType, customer, disabled }) => {
   return (
     <>
       <div className="col-span-2">
@@ -202,6 +220,7 @@ const AddressBlock = ({ addressType, customer }) => {
           id={`${addressType}_line1`}
           name={`${addressType}_line1`}
           isRequired
+          disabled={disabled}
         />
       </div>
       <div className="col-span-2">
@@ -209,6 +228,7 @@ const AddressBlock = ({ addressType, customer }) => {
           placeholder="Line 2"
           id={`${addressType}_line2`}
           name={`${addressType}_line2`}
+          disabled={disabled}
         />
       </div>
       <div className="col-span-2">
@@ -216,6 +236,7 @@ const AddressBlock = ({ addressType, customer }) => {
           placeholder="Line 3"
           id={`${addressType}_line3`}
           name={`${addressType}_line3`}
+          disabled={disabled}
         />
       </div>
       <div className="col-span-2 mt-3">
@@ -223,6 +244,7 @@ const AddressBlock = ({ addressType, customer }) => {
           label="City"
           id={`${addressType}_city`}
           name={`${addressType}_city`}
+          disabled={disabled}
           isRequired
         />
       </div>
@@ -231,6 +253,7 @@ const AddressBlock = ({ addressType, customer }) => {
           label="State"
           id={`${addressType}_state`}
           name={`${addressType}_state`}
+          disabled={disabled}
           isRequired
         />
       </div>
@@ -240,6 +263,7 @@ const AddressBlock = ({ addressType, customer }) => {
           isRequired
           id={`${addressType}_zip`}
           name={`${addressType}_zip`}
+          disabled={disabled}
         />
       </div>
       <div className="col-span-2 mt-1">
@@ -251,6 +275,7 @@ const AddressBlock = ({ addressType, customer }) => {
           isRequired
           id={`${addressType}_country`}
           name={`${addressType}_country`}
+          disabled={disabled}
         />
       </div>
       <div className="col-span-2 mt-1">
@@ -259,6 +284,7 @@ const AddressBlock = ({ addressType, customer }) => {
           isRequired
           id={`${addressType}_phoneNumber`}
           name={`${addressType}_phoneNumber`}
+          disabled={disabled}
         />
       </div>
     </>
