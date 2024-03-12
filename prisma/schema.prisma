@@ -52,11 +52,12 @@ model Address {
 
 model Passport {
   id             Int       @id @default(autoincrement())
-  customer       Customer?
   passportNumber String
   issueDate      String
   expiryDate     String
   issuingCountry String?
+  customer       Customer? @relation(fields: [customerId], references: [id])
+  customerId     Int?      @unique
 }
 
 model Customer {
@@ -65,7 +66,7 @@ model Customer {
   fullName              String
   shortName             String    @unique
   type                  String
-  branchCode            Int
+  branchCode            String
   prefix                String?
   firstName             String?
   middleName            String?
@@ -75,11 +76,10 @@ model Customer {
   dateOfBirth           DateTime
   addresses             Address[]
   residentStatus        String
-  passport              Passport? @relation(fields: [passportId], references: [id])
-  passportId            Int?      @unique
+  passport              Passport?
   authStatus            String
   relationshipManager   User?     @relation(fields: [relationshipManagerId], references: [id])
-  relationshipManagerId Int
+  relationshipManagerId Int?
   maker                 String
   minor                 Boolean
   createdAt             DateTime  @default(now())

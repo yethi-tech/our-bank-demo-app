@@ -39,6 +39,7 @@ const Select = ({
   placeholder = "Select One",
   options = [],
   by,
+  applyFormBehavior,
 }) => {
   const [selected, setSelected] = useState(value || defaultValue);
 
@@ -76,7 +77,7 @@ const Select = ({
         {label}
       </label>
       <div className="mt-2">
-        <div
+        <input
           className="tjn_form_control__hidden_base"
           type="hidden"
           name={name}

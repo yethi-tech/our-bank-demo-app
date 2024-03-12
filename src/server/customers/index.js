@@ -1,19 +1,26 @@
 import prisma from "@/lib/prisma";
 
 export const createNewCustomer = async (customer) => {
+  const { passport, addresses, ...customerData } = customer;
+
+  const count = await prisma.customer.count({
+    where: {
+      branchCode: customer.branchCode,
+    },
+  });
+
+  const customerId = `OB${customer.branchCode}${getNewSequence(count)}`;
+  customerData.customerId = customerId;
+
   try {
-    const count = await prisma.customer.count({
-      where: {
-        branchCode: customer.branchCode,
-      },
-    });
+    const newCustomer = await prisma.customer.create({ data: customerData });
+    if (passport) {
+      const createdPassport = await prisma.passport.create({
+        data: { ...passport, customerId: newCustomer.id },
+      });
+    }
 
-    const customerId = `OB${customer.branchCode}${getNewSequence(count)}`;
-    customer.customerId = customerId;
-
-    const newCustomer = await prisma.customer.create({ data: customer });
-    console.log("Customer created with ID: ", newCustomer.id);
-    return newCustomer;
+    return { ...newCustomer };
   } catch (error) {
     throw error;
   }
@@ -46,5 +53,5 @@ export const findByUdid = async (udid) => {
 };
 
 const getNewSequence = (count) => {
-  return String(count).padStart(6, "0");
+  return String(count + 1).padStart(6, "0");
 };

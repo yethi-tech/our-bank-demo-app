@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { createCustomer } from "@/app/actions/customers";
+import AlertDialog from "../../alertDialog";
 
 const initialState = {
   message: "",
@@ -25,24 +26,14 @@ const CustomerForm = ({ customer }) => {
   const router = useRouter();
   const [state, formAction] = useFormState(createCustomer, initialState);
 
+  const resetToInitialState = async () => {
+    formAction(null);
+  };
   const handleCancel = (e) => {
     e.preventDefault();
     if (window.confirm(CONFIRM_CANCEL)) {
       router.push("/branch/customers");
     }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-    const postObject = {};
-    for (var pair of formData.entries()) {
-      const [key, value] = pair;
-      postObject[key] = value;
-    }
-
-    console.log(postObject);
   };
 
   const { pending } = useFormStatus();
@@ -59,9 +50,12 @@ const CustomerForm = ({ customer }) => {
             </h2>
           </div>
           {!success && message ? (
-            <div className="error-message" id="errorMessage">
-              <p className="text-sm text-tenjin-error">{message}</p>
-            </div>
+            <AlertDialog
+              type="error"
+              title="Error"
+              message={message}
+              onClose={resetToInitialState}
+            />
           ) : (
             <></>
           )}

@@ -8,7 +8,7 @@ export default function Success({ message, onClose }) {
     if (onClose) {
       onClose();
     } else {
-      setOpen(false);
+      setIsOpen(false);
     }
   }
 

@@ -6,7 +6,16 @@ import {
   findByUdid,
 } from "@/server/customers";
 
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
+
 export async function createCustomer(prevState, formData) {
+  if (!formData) {
+    return { success: false, message: null };
+  }
+
+  const session = await getServerSession(authOptions);
+
   const postedObject = {};
   for (var pair of formData.entries()) {
     const [key, value] = pair;
@@ -25,6 +34,8 @@ export async function createCustomer(prevState, formData) {
     udid,
     gender,
     dateOfBirth,
+    residentStatus,
+    type,
   } = postedObject;
 
   const customerToCreate = {
@@ -34,10 +45,20 @@ export async function createCustomer(prevState, formData) {
     firstName,
     lastName,
     middleName,
-    dateOfBirth,
     udid,
     gender,
+    residentStatus,
+    type,
+
+    maker: session.user.userId,
   };
+
+  if (!dateOfBirth) {
+    return { success: false, message: "Date of Birth is required" };
+  } else {
+    customerToCreate.dateOfBirth = new Date(dateOfBirth).toISOString();
+    customerToCreate.minor = isMinor(dateOfBirth);
+  }
 
   const customerByShortName = await findByShortName(shortName);
   if (customerByShortName) {
@@ -52,6 +73,18 @@ export async function createCustomer(prevState, formData) {
   try {
     validatePassportInfo(postedObject, customerToCreate);
     validateAddresses(postedObject, customerToCreate);
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message || "An internal error occurred",
+    };
+  }
+
+  customerToCreate.authStatus = "Unauthorized";
+
+  console.log("Final Customer data: ", JSON.stringify(customerToCreate));
+
+  try {
     let createdCustomer = await createNewCustomer(customerToCreate);
     return {
       success: true,
@@ -59,9 +92,18 @@ export async function createCustomer(prevState, formData) {
         "Customer created successfully with ID: " + createdCustomer.customerId,
     };
   } catch (error) {
+    console.error("ERROR creating customer", error);
     return { success: false, message: "An internal error occurred." };
   }
 }
+
+const isMinor = (dateOfBirth) => {
+  const eighteenYearsAgo = new Date(dateOfBirth);
+  eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() + 18);
+
+  const currentDate = new Date();
+  return currentDate > eighteenYearsAgo;
+};
 
 const validateAddresses = (requestData, customerToCreate) => {
   const {
