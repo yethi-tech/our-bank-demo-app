@@ -13,7 +13,14 @@ export const createNewCustomer = async (customer) => {
   customerData.customerId = customerId;
 
   try {
-    const newCustomer = await prisma.customer.create({ data: customerData });
+    const newCustomer = await prisma.customer.create({
+      data: {
+        ...customerData,
+        addresses: {
+          createMany: { data: addresses },
+        },
+      },
+    });
     if (passport) {
       const createdPassport = await prisma.passport.create({
         data: { ...passport, customerId: newCustomer.id },

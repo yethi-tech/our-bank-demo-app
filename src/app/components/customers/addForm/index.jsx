@@ -49,9 +49,9 @@ const CustomerForm = ({ customer }) => {
               {customer ? "Update Customer" : "New Customer"}
             </h2>
           </div>
-          {!success && message ? (
+          {message ? (
             <AlertDialog
-              type="error"
+              type={success ? "success" : "error"}
               title="Error"
               message={message}
               onClose={resetToInitialState}

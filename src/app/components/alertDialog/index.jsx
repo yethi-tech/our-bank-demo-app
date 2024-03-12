@@ -69,7 +69,7 @@ const AlertDialog = ({ type, title, message, onClose }) => {
                   </p>
                 </div>
 
-                <div className="mt-4 flex items-center jusitfy-end">
+                <div className="mt-4 flex items-center justify-end">
                   <Button
                     size="tiny"
                     variant="contained"
