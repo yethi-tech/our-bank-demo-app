@@ -26,6 +26,7 @@ export async function createCustomer(prevState, formData) {
 
   const {
     fullName,
+    prefix,
     shortName,
     branchCode,
     firstName,
@@ -40,6 +41,7 @@ export async function createCustomer(prevState, formData) {
 
   const customerToCreate = {
     fullName,
+    prefix,
     shortName: shortName.toUpperCase(),
     branchCode,
     firstName,

@@ -40,6 +40,10 @@ const CustomerForm = ({ customer }) => {
 
   const { success, message } = state;
 
+  const redirectToCustomerList = () => {
+    router.push(`/branch/customers`);
+  };
+
   return (
     <div id="form">
       <form name="customer_form" action={formAction}>
@@ -52,9 +56,15 @@ const CustomerForm = ({ customer }) => {
           {message ? (
             <AlertDialog
               type={success ? "success" : "error"}
-              title="Error"
+              title={success ? "Success" : "Error"}
               message={message}
-              onClose={resetToInitialState}
+              onClose={() => {
+                if (success) {
+                  redirectToCustomerList();
+                } else {
+                  resetToInitialState();
+                }
+              }}
             />
           ) : (
             <></>

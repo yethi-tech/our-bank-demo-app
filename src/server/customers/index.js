@@ -22,7 +22,7 @@ export const createNewCustomer = async (customer) => {
       },
     });
     if (passport) {
-      const createdPassport = await prisma.passport.create({
+      await prisma.passport.create({
         data: { ...passport, customerId: newCustomer.id },
       });
     }
