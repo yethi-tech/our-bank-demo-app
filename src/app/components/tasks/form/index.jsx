@@ -69,7 +69,7 @@ const AddForm = ({ onCancel }) => {
 
                 <div className="col-span-full">
                   <label
-                    htmlFor="username"
+                    htmlFor="taskSummary"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
                     Task Summary
@@ -89,7 +89,7 @@ const AddForm = ({ onCancel }) => {
                 </div>
                 <div className="col-span-2">
                   <label
-                    htmlFor="purpose"
+                    htmlFor="user"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
                     User
@@ -97,6 +97,8 @@ const AddForm = ({ onCancel }) => {
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 w-full">
                       <input
+                        id="user"
+                        name="user"
                         type="text"
                         autoComplete="none"
                         className="block  flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -115,6 +117,8 @@ const AddForm = ({ onCancel }) => {
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 w-full">
                       <input
+                        id="purpose"
+                        name="purpose"
                         type="text"
                         autoComplete="none"
                         className="block  flex-1 border-0 bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -126,7 +130,7 @@ const AddForm = ({ onCancel }) => {
 
                 <div className="col-span-full">
                   <label
-                    htmlFor="about"
+                    htmlFor="description"
                     className="block text-sm font-medium leading-6 text-gray-900"
                   >
                     Description
