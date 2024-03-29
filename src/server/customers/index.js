@@ -33,6 +33,33 @@ export const createNewCustomer = async (customer) => {
   }
 };
 
+export const searchCustomers = async (
+  limit = 5,
+  page = 1,
+  sort = {
+    firstName: "asc",
+  },
+  filter = {}
+) => {
+  const skip = (page - 1) * limit;
+  const where = {};
+
+  try {
+    const customers = await prisma.customer.findMany({
+      take: limit,
+      skip,
+      orderBy: sort,
+      where,
+    });
+
+    const totalRecords = await primsa.customer.count();
+    const totalPages = Math.ceil(totalRecords / limit);
+    return { data: customers, totalRecords, totalPages };
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const findByShortName = async (shortName) => {
   try {
     const record = await prisma.customer.findFirst({

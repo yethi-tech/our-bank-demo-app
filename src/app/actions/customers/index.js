@@ -4,10 +4,20 @@ import {
   createNewCustomer,
   findByShortName,
   findByUdid,
+  searchCustomers,
 } from "@/server/customers";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
+
+export async function getCustomers(pageSize, currentPage, sort, criteria) {
+  try {
+    const result = await searchCustomers(pageSize, currentPage, sort, criteria);
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+}
 
 export async function createCustomer(prevState, formData) {
   if (!formData) {
