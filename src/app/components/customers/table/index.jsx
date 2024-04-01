@@ -2,12 +2,18 @@
 
 import PropTypes from "prop-types";
 import Table from "@/components/shared/table";
+import Link from "next/link";
 
 const columns = [
   {
     name: "customerId",
     display: "Customer ID",
     width: "120px",
+    render: (item) => (
+      <Link href={`/branch/customers/${item.id}`}>
+        <span className="text-tenjin-primary">{item.customerId}</span>
+      </Link>
+    ),
   },
   {
     name: "shortName",
