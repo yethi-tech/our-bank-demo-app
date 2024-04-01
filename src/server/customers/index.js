@@ -52,7 +52,7 @@ export const searchCustomers = async (
       where,
     });
 
-    const totalRecords = await primsa.customer.count();
+    const totalRecords = await prisma.customer.count();
     const totalPages = Math.ceil(totalRecords / limit);
     return { data: customers, totalRecords, totalPages };
   } catch (error) {

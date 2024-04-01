@@ -36,9 +36,7 @@ const TasksTable = ({ tasks }) => {
     return <></>;
   }
 
-  return (
-    <Table id="tasks_table" columns={columns} data={tasks.data} size="large" />
-  );
+  return <Table id="tasks_table" columns={columns} data={tasks.data} />;
 };
 
 TasksTable.propTypes = {
