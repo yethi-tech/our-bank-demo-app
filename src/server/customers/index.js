@@ -86,6 +86,24 @@ export const findByUdid = async (udid) => {
   }
 };
 
+export const findById = async (id) => {
+  try {
+    const record = await prisma.customer.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        addresses: true,
+        passport: true,
+      },
+    });
+
+    return record;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getNewSequence = (count) => {
   return String(count + 1).padStart(6, "0");
 };

@@ -2,6 +2,7 @@
 
 import {
   createNewCustomer,
+  findById,
   findByShortName,
   findByUdid,
   searchCustomers,
@@ -16,6 +17,16 @@ export async function getCustomers(pageSize, currentPage, sort, criteria) {
     return { success: true, data: result };
   } catch (error) {
     return { success: false, message: error.message };
+  }
+}
+
+export async function getCustomerById(id) {
+  let customerId = id ? Number(id) : 0;
+  try {
+    const result = await findById(customerId);
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, data: error.message };
   }
 }
 

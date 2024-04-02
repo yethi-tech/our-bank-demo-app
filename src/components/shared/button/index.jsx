@@ -24,12 +24,6 @@ const iconSet = {
   home: <FaHome />,
   refresh: <FaArrowRotateRight />,
 };
-// Button.defaultProps = {
-//   size: "medium",
-//   color: "primary",
-//   variant: "text",
-//   type: "button",
-// };
 const Button = ({
   children,
   id,

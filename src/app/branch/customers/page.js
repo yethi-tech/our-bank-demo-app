@@ -1,6 +1,5 @@
 import CustomerList from "@/app/components/customers/list";
 import SuspenseFallback from "@/app/components/suspenseFallback";
-import Skeleton from "@/app/components/tasks/list/Skeleton";
 import Button from "@/components/shared/button";
 import PageContent from "@/components/shared/pageContent";
 import PageHeader from "@/components/shared/pageHeader";
