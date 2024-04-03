@@ -7,6 +7,7 @@ import {
   FaArrowLeft,
   FaCopy,
   FaEdit,
+  FaFilter,
   FaHome,
   FaPlus,
   FaRegSave,
@@ -23,6 +24,7 @@ const iconSet = {
   copy: <FaCopy />,
   home: <FaHome />,
   refresh: <FaArrowRotateRight />,
+  filter: <FaFilter />,
 };
 const Button = ({
   children,

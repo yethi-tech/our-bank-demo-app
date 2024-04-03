@@ -9,7 +9,6 @@ const Input = ({
   id,
   name,
   isRequired,
-  value,
   placeholder,
   type = "text",
   ...rest

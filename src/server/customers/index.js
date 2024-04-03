@@ -42,7 +42,7 @@ export const searchCustomers = async (
   filter = {}
 ) => {
   const skip = (page - 1) * limit;
-  const where = {};
+  const where = buildCriteria(filter);
 
   try {
     const customers = await prisma.customer.findMany({
@@ -106,4 +106,23 @@ export const findById = async (id) => {
 
 const getNewSequence = (count) => {
   return String(count + 1).padStart(6, "0");
+};
+
+const buildCriteria = (filter) => {
+  let where = {};
+
+  Object.keys(filter).forEach((key) => {
+    if (filter[key]) {
+      // Check if the filter value is an array or not
+      if (Array.isArray(filter[key])) {
+        // Use `in` for array values to match any value in the array
+        where[key] = { in: filter[key] };
+      } else {
+        // Use direct equality for non-array values
+        where[key] = filter[key];
+      }
+    }
+  });
+
+  return where;
 };

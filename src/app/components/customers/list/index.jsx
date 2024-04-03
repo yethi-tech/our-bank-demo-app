@@ -6,13 +6,15 @@ import Pagination from "@/components/shared/pagination";
 import React, { useEffect, useState } from "react";
 import Skeleton from "../../tasks/list/Skeleton";
 import CustomersTable from "../table";
+import { useSearchCriteria } from "@/app/contexts/SearchCriteriaContext";
 
 const CustomerList = () => {
   const [customers, setCustomers] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchCriteria, setSearchCriteria] = useState({});
+
+  const { searchCriteria } = useSearchCriteria();
 
   const onPageChange = (newPage) => {
     setCurrentPage(newPage);
