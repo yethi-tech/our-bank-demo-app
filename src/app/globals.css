@@ -25,6 +25,12 @@ body {
   overflow: hidden;
 }
 
+.label-mandatory::after {
+  @apply text-red-500; /* Red color for the asterisk */
+  content: "*"; /* The asterisk to show */
+  margin-left: 0.25rem; /* A small margin from the label text */
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

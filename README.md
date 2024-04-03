@@ -53,7 +53,7 @@ This command outputs an encrypted key. We will use this in the next step.
 In the `.env` file, add the following line
 
 ```
-AUTH_SECRET="{{your_generated_openssl_key}}"
+NEXTAUTH_SECRET="{{your_generated_openssl_key}}"
 ```
 
 ### Running the Application

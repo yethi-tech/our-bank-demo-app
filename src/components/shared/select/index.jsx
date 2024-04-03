@@ -4,6 +4,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Listbox, Transition } from "@headlessui/react";
 import { FaCheck, FaChevronDown } from "react-icons/fa";
+import clsx from "clsx";
 
 const getLabel = (option, by, labelKey) => {
   if (!option) return null;
@@ -38,6 +39,7 @@ const Select = ({
   placeholder = "Select One",
   options = [],
   by,
+  applyFormBehavior,
 }) => {
   const [selected, setSelected] = useState(value || defaultValue);
 
@@ -66,13 +68,16 @@ const Select = ({
   return (
     <div className="tjn_ui_control tjn_form_control w-full">
       <label
-        htmlFor={id}
-        className="tjn_form_control__label block text-sm font-medium leading-6 text-gray-900"
+        // htmlFor={id}
+        className={clsx(
+          "tjn_form_control__label block text-sm font-medium leading-6 text-gray-900",
+          { "label-mandatory": isRequired }
+        )}
       >
         {label}
       </label>
       <div className="mt-2">
-        <div
+        <input
           className="tjn_form_control__hidden_base"
           type="hidden"
           name={name}

@@ -1,9 +1,7 @@
 "use client";
-import React from "react";
+import Table from "@/components/shared/table";
 import PropTypes from "prop-types";
 import Moment from "react-moment";
-import Table from "@/components/shared/table";
-import Pagination from "@/components/shared/pagination";
 
 const columns = [
   {
@@ -37,7 +35,7 @@ const TasksTable = ({ tasks }) => {
   }
 
   return (
-    <Table id="tasks_table" columns={columns} data={tasks.data} size="large" />
+    <Table id="tasks_table" columns={columns} data={tasks.data} size="small" />
   );
 };
 

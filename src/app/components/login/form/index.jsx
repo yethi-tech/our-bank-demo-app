@@ -66,6 +66,7 @@ const LoginForm = () => {
             </Button>
             <Button
               loading={loading}
+              id="loginButton"
               loadingText="Please Wait..."
               type="submit"
               size="small"
