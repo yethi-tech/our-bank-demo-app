@@ -37,7 +37,7 @@ const columns = [
   },
   {
     name: "branchCode",
-    display: "Branch Code",
+    display: "Branch",
     width: "60px",
   },
   {
