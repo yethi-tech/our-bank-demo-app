@@ -68,7 +68,7 @@ const Select = ({
   return (
     <div className="tjn_ui_control tjn_form_control w-full">
       <label
-        // htmlFor={id}
+        htmlFor={id}
         className={clsx(
           "tjn_form_control__label block text-sm font-medium leading-6 text-gray-900",
           { "label-mandatory": isRequired }
