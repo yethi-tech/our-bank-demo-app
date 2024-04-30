@@ -4,15 +4,27 @@ import Button from "@/components/shared/button";
 import React, { useState } from "react";
 import { GrUserAdmin } from "react-icons/gr";
 import AlertDialog from "../../alertDialog";
+import { useRouter } from "next/navigation";
 
 const AuthorizeCustomerButton = ({ id }) => {
+  const router = useRouter();
+
   const [authorizationResult, setAuthorizationResult] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const doAuthorize = async () => {
     setLoading(true);
     const result = await authorizeCustomer(id);
     setAuthorizationResult(result);
     setLoading(false);
+  };
+
+  const handleAlertClose = () => {
+    if (authorizationResult.success) {
+      router.refresh();
+    } else {
+      setAuthorizationResult(null);
+    }
   };
 
   return (
@@ -38,7 +50,7 @@ const AuthorizeCustomerButton = ({ id }) => {
               ? "Authorization successful!"
               : authorizationResult.message
           }
-          onClose={() => setAuthorizationResult(null)}
+          onClose={handleAlertClose}
         />
       )}
     </>
