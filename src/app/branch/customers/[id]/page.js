@@ -28,7 +28,7 @@ export default async function CustomerDetailsPage({ params }) {
         title="Customer Details"
         id="page_header"
         actions={[
-          <AuthorizeCustomerButton id={customer.id} />,
+          <AuthorizeCustomerButton key="authorize" id={customer.id} />,
           <Button
             variant="outlined"
             size="small"
