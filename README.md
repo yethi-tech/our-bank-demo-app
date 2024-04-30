@@ -15,7 +15,13 @@ Follow these steps to get your dev environment up and running. Firstly, you need
 First, you need to have a Postgresql DB. You can run it on docker, using the following command
 
 ```bash
-docker run --name=my_pg_db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=secret -e POSTGRES_DB=my_db -p 5432:5432 -d postgres
+docker run --name=ourbank_db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=secret -e POSTGRES_DB=ourbank -p 5433:5432 -d postgres
+```
+
+Now, go to your `.env` file and add the following line, which specifies the DB connection string.
+
+```
+DATABASE_URL="postgres://postgres:secret@localhost:5433/ourbank?pgbouncer=true&connect_timeout=15"
 ```
 
 Once the database is installed, run the following command
@@ -33,12 +39,6 @@ npm run seed
 ```
 
 This will create the initial data required in the database.
-
-Now, go to your `.env` file and add the following line, which specifies the DB connection string.
-
-```
-DATABASE_URL="postgres://localhost:5432/my_db?pgbouncer=true&connect_timeout=15"
-```
 
 ### Adding the OpenSSL Key
 
