@@ -43,7 +43,7 @@ const AuthorizeCustomerButton = ({ id }) => {
       </Button>
       {authorizationResult && (
         <AlertDialog
-          type={authorizationResult.success}
+          type={authorizationResult.success ? "success" : "error"}
           title={authorizationResult.success ? "Success" : "Error"}
           message={
             authorizationResult.success
