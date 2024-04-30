@@ -33,6 +33,19 @@ export const createNewCustomer = async (customer) => {
   }
 };
 
+export const updateCustomerById = async (id, dataToUpdate) => {
+  try {
+    const updatedCustomer = await prisma.customer.update({
+      where: { id: id },
+      data: { ...dataToUpdate },
+    });
+
+    return { ...updatedCustomer };
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const searchCustomers = async (
   limit = 5,
   page = 1,

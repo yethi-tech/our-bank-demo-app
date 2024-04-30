@@ -6,6 +6,7 @@ import {
   findByShortName,
   findByUdid,
   searchCustomers,
+  updateCustomerById,
 } from "@/server/customers";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -117,6 +118,33 @@ export async function createCustomer(prevState, formData) {
   } catch (error) {
     console.error("ERROR creating customer", error);
     return { success: false, message: "An internal error occurred." };
+  }
+}
+
+export async function authorizeCustomer(id) {
+  let customerByIdResponse = await getCustomerById(id);
+  if (customerByIdResponse.success) {
+    let customer = customerByIdResponse.data;
+    const session = await getServerSession(authOptions);
+
+    const checker = session.user.userId;
+    if (checker === customer.maker) {
+      return {
+        success: false,
+        message: "Record cannot be authorized by Maker",
+      };
+    }
+
+    try {
+      await updateCustomerById(id, {
+        checker: checker,
+        authStatus: "Authorized",
+      });
+      return { success: true, message: "Record successfully authorized." };
+    } catch (error) {
+      console.error("ERROR authorizing customer", error);
+      return { success: false, message: "An internal error occurred." };
+    }
   }
 }
 

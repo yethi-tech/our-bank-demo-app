@@ -81,6 +81,7 @@ model Customer {
   relationshipManager   User?     @relation(fields: [relationshipManagerId], references: [id])
   relationshipManagerId Int?
   maker                 String
+  checker               String?
   minor                 Boolean
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt

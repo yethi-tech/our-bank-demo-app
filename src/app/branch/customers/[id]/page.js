@@ -1,4 +1,5 @@
 import { getCustomerById } from "@/app/actions/customers";
+import AuthorizeCustomerButton from "@/app/components/customers/authorizeCustomerButton";
 import CustomerDetails from "@/app/components/customers/details";
 import SuspenseFallback from "@/app/components/suspenseFallback";
 import Button from "@/components/shared/button";
@@ -27,15 +28,7 @@ export default async function CustomerDetailsPage({ params }) {
         title="Customer Details"
         id="page_header"
         actions={[
-          <Button
-            variant="contained"
-            size="small"
-            id="btn_authorize"
-            key="authorize"
-            icon={<GrUserAdmin />}
-          >
-            Authorize
-          </Button>,
+          <AuthorizeCustomerButton id={customer.id} />,
           <Button
             variant="outlined"
             size="small"
