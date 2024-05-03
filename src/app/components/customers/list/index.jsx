@@ -8,6 +8,8 @@ import Skeleton from "../../tasks/list/Skeleton";
 import CustomersTable from "../table";
 import { useSearchCriteria } from "@/app/contexts/SearchCriteriaContext";
 
+let PAGE_SIZE = 25;
+
 const CustomerList = () => {
   const [customers, setCustomers] = useState({});
   const [error, setError] = useState(null);
@@ -25,7 +27,7 @@ const CustomerList = () => {
       setLoading(true);
       try {
         const result = await getCustomers(
-          25,
+          PAGE_SIZE,
           currentPage,
           { createdAt: "desc" },
           searchCriteria
@@ -77,7 +79,7 @@ const CustomerList = () => {
       <div id="pagination_container" className="my-2 py-2">
         <div id="pagination_container">
           <Pagination
-            pageSize={5}
+            pageSize={PAGE_SIZE}
             totalPages={customers.totalPages}
             currentPage={currentPage}
             onPageChange={onPageChange}
