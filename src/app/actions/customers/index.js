@@ -73,9 +73,14 @@ export async function createCustomer(prevState, formData) {
     gender,
     residentStatus,
     type,
-
     maker: session.user.userId,
   };
+
+  try {
+    validateMandatoryFields(customerToCreate);
+  } catch (error) {
+    return { success: false, message: error };
+  }
 
   if (!dateOfBirth) {
     return { success: false, message: "Date of Birth is required" };
@@ -250,5 +255,59 @@ const validatePassportInfo = (requestData, customerToCreate) => {
       expiryDate: requestData.passportExpiryDate,
       issuingCountry: "IN",
     };
+  }
+};
+
+// const validateMandatoryFields = (customerToCreate) => {
+//   let { fullName, shortName, firstName, udid, gender, residentStatus, type } =
+//     customerToCreate;
+
+//   if (!type) {
+//     throw "Type is required";
+//   }
+
+//   if (!fullName) {
+//     throw "Full Name is required";
+//   }
+
+//   if (!firstName) {
+//     throw "First Name is required";
+//   }
+
+//   if (!shortName) {
+//     throw "Short Name is required";
+//   }
+
+//   if (!gender) {
+//     throw "Gender is requried";
+//   }
+
+//   if (!residentStatus) {
+//     throw "Resident Status is required";
+//   }
+
+//   if (!udid) {
+//     throw "UDID is required";
+//   }
+// };
+
+const validateMandatoryFields = (customerToCreate) => {
+  const mandatoryFields = [
+    "type",
+    "fullName",
+    "firstName",
+    "shortName",
+    "gender",
+    "residentStatus",
+    "udid",
+  ];
+
+  for (const field of mandatoryFields) {
+    const fieldName = field.replace(/([a-z])([A-Z])/g, "$1 $2"); // Split camel case into two words
+    if (!customerToCreate[field]) {
+      throw `${
+        fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+      } is required`;
+    }
   }
 };
