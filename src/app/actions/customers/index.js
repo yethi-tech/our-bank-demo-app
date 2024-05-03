@@ -2,6 +2,7 @@
 
 import {
   createNewCustomer,
+  updateCustomer as updateExistingCustomer,
   findById,
   findByShortName,
   findByUdid,
@@ -43,8 +44,6 @@ export async function createCustomer(prevState, formData) {
     const [key, value] = pair;
     postedObject[key] = value;
   }
-
-  console.log("Building entity...");
 
   const {
     fullName,
@@ -122,6 +121,110 @@ export async function createCustomer(prevState, formData) {
     };
   } catch (error) {
     console.error("ERROR creating customer", error);
+    return { success: false, message: "An internal error occurred." };
+  }
+}
+
+export async function updateCustomer(prevState, formData) {
+  if (!formData) {
+    return { success: false, message: null };
+  }
+
+  const session = await getServerSession(authOptions);
+
+  const postedObject = {};
+  for (var pair of formData.entries()) {
+    const [key, value] = pair;
+    postedObject[key] = value;
+  }
+
+  const {
+    fullName,
+    prefix,
+    shortName,
+    branchCode,
+    firstName,
+    middleName,
+    lastName,
+    udid,
+    gender,
+    dateOfBirth,
+    residentStatus,
+    type,
+  } = postedObject;
+
+  let customerByIdResponse = await getCustomerById(Number(postedObject.id));
+
+  if (!customerByIdResponse.success) {
+    return { success: false, message: "This customer does not exist." };
+  }
+
+  let customer = customerByIdResponse.data;
+
+  const customerToUpdate = {
+    fullName,
+    prefix,
+    shortName: shortName.toUpperCase(),
+    branchCode,
+    firstName,
+    lastName,
+    middleName,
+    udid,
+    gender,
+    residentStatus,
+    type,
+    maker: session.user.userId,
+  };
+
+  try {
+    validateMandatoryFields(customerToUpdate);
+  } catch (error) {
+    return { success: false, message: error };
+  }
+
+  if (!dateOfBirth) {
+    return { success: false, message: "Date of Birth is required" };
+  } else {
+    customerToUpdate.dateOfBirth = new Date(dateOfBirth).toISOString();
+    customerToUpdate.minor = isMinor(dateOfBirth);
+  }
+
+  if (customer.shortName !== shortName) {
+    const customerByShortName = await findByShortName(shortName);
+    if (customerByShortName) {
+      return { success: false, message: "This short name is already used" };
+    }
+  }
+
+  if (customer.udid !== udid) {
+    const customerByUdid = await findByUdid(udid);
+    if (customerByUdid) {
+      return { success: false, message: "This UDID is already used" };
+    }
+  }
+
+  try {
+    validatePassportInfo(postedObject, customerToUpdate);
+    validateAddresses(postedObject, customerToUpdate);
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message || "An internal error occurred",
+    };
+  }
+
+  customerToUpdate.authStatus = "Unauthorized";
+
+  console.log("Final Customer data: ", JSON.stringify(customerToUpdate));
+
+  try {
+    await updateExistingCustomer(customer.id, customerToUpdate);
+    return {
+      success: true,
+      message: `Record Updated Successfully!`,
+    };
+  } catch (error) {
+    console.error("ERROR updating customer", error);
     return { success: false, message: "An internal error occurred." };
   }
 }
@@ -257,39 +360,6 @@ const validatePassportInfo = (requestData, customerToCreate) => {
     };
   }
 };
-
-// const validateMandatoryFields = (customerToCreate) => {
-//   let { fullName, shortName, firstName, udid, gender, residentStatus, type } =
-//     customerToCreate;
-
-//   if (!type) {
-//     throw "Type is required";
-//   }
-
-//   if (!fullName) {
-//     throw "Full Name is required";
-//   }
-
-//   if (!firstName) {
-//     throw "First Name is required";
-//   }
-
-//   if (!shortName) {
-//     throw "Short Name is required";
-//   }
-
-//   if (!gender) {
-//     throw "Gender is requried";
-//   }
-
-//   if (!residentStatus) {
-//     throw "Resident Status is required";
-//   }
-
-//   if (!udid) {
-//     throw "UDID is required";
-//   }
-// };
 
 const validateMandatoryFields = (customerToCreate) => {
   const mandatoryFields = [

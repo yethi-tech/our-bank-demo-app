@@ -8,8 +8,24 @@ import Select from "@/components/shared/select";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { createCustomer } from "@/app/actions/customers";
+import { createCustomer, updateCustomer } from "@/app/actions/customers";
 import AlertDialog from "../../alertDialog";
+
+function formatDateForInput(dateString) {
+  // Parse the date string into a JavaScript Date object
+  const date = new Date(dateString);
+
+  // Extract year, month, and day components
+  const year = date.getFullYear();
+  // JavaScript months are zero-based, so add 1 to get the correct month
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  // Format the date as a string compatible with the input type="date"
+  const formattedDate = `${year}-${month}-${day}`;
+
+  return formattedDate;
+}
 
 const initialState = {
   message: "",
@@ -24,7 +40,10 @@ const countries = [
 
 const CustomerForm = ({ customer }) => {
   const router = useRouter();
-  const [state, formAction] = useFormState(createCustomer, initialState);
+  const [state, formAction] = useFormState(
+    customer ? updateCustomer : createCustomer,
+    initialState
+  );
 
   const resetToInitialState = async () => {
     formAction(null);
@@ -44,9 +63,18 @@ const CustomerForm = ({ customer }) => {
     router.push(`/branch/customers`);
   };
 
+  const redirectToCustomerDetails = () => {
+    if (customer) {
+      router.push(`/branch/customers/${customer.id}`);
+    }
+  };
+
   return (
     <div id="form">
       <form name="customer_form" action={formAction}>
+        {customer && (
+          <input type="hidden" id="customerId" name="id" value={customer.id} />
+        )}
         <div className="space-y-4">
           <div>
             <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -60,7 +88,11 @@ const CustomerForm = ({ customer }) => {
               message={message}
               onClose={() => {
                 if (success) {
-                  redirectToCustomerList();
+                  if (customer) {
+                    redirectToCustomerDetails();
+                  } else {
+                    redirectToCustomerList();
+                  }
                 } else {
                   resetToInitialState();
                 }
@@ -106,7 +138,7 @@ const BasicDetails = ({ customer }) => {
         <Select
           label="Type"
           options={customerTypes}
-          defaultValue={customer?.type}
+          value={customer?.type}
           isRequired
           id="customerType"
           name="type"
@@ -115,6 +147,7 @@ const BasicDetails = ({ customer }) => {
       <div className="col-span-4">
         <Input
           autoFocus
+          defaultValue={customer?.fullName}
           id="fullName"
           name="fullName"
           isRequired
@@ -122,14 +155,20 @@ const BasicDetails = ({ customer }) => {
         />
       </div>
       <div className="col-span-3">
-        <Input id="shortName" name="shortName" isRequired label="Short Name" />
+        <Input
+          defaultValue={customer?.shortName}
+          id="shortName"
+          name="shortName"
+          isRequired
+          label="Short Name"
+        />
       </div>
       <div className="col-span-2">
         <Input
           id="branchCode"
           name="branchCode"
-          defaultValue="001"
           isRequired
+          defaultValue={customer ? customer.branchCode : "001"}
           label="Branch Code"
         />
       </div>
@@ -152,20 +191,38 @@ const PersonalDetails = ({ customer }) => {
           options={["Mr.", "Mrs.", "Ms.", "Master", "Dr.", "Sir", "Lord"]}
           id="prefix"
           name="prefix"
+          value={customer?.prefix}
         />
       </div>
       <div className="col-span-3">
-        <Input label="First Name" isRequired id="firstName" name="firstName" />
+        <Input
+          defaultValue={customer?.firstName}
+          label="First Name"
+          isRequired
+          id="firstName"
+          name="firstName"
+        />
       </div>
       <div className="col-span-3">
-        <Input label="Middle Name" id="middleName" name="middleName" />
+        <Input
+          defaultValue={customer?.middleName}
+          label="Middle Name"
+          id="middleName"
+          name="middleName"
+        />
       </div>
       <div className="col-span-3">
-        <Input label="Last Name" id="lastName" name="lastName" />
+        <Input
+          defaultValue={customer?.lastName}
+          label="Last Name"
+          id="lastName"
+          name="lastName"
+        />
       </div>
       <div className="col-span-2">
         <Select
           label="Gender"
+          defaultValue={customer?.gender}
           isRequired
           options={["Male", "Female", "Other", "Undisclosed"]}
           id="gender"
@@ -179,6 +236,9 @@ const PersonalDetails = ({ customer }) => {
           id="dateOfBirth"
           name="dateOfBirth"
           type="date"
+          defaultValue={
+            customer ? formatDateForInput(customer.dateOfBirth) : null
+          }
         />
       </div>
       <div className="col-span-2">
@@ -186,6 +246,7 @@ const PersonalDetails = ({ customer }) => {
           label="Resident Status"
           isRequired
           id="residentStatus"
+          value={customer?.residentStatus}
           name="residentStatus"
           options={["Resident", "Non-Resident"]}
         />
@@ -198,7 +259,7 @@ const ContactDetails = ({ customer }) => {
   const [
     permenantAddressSameAsContactAddress,
     setPermanentAddressSameAsContactAddress,
-  ] = useState(true);
+  ] = useState(customer ? false : true);
   const onAddressCheckChange = (e) => {
     setPermanentAddressSameAsContactAddress(e.target.checked);
   };
@@ -243,6 +304,15 @@ const ContactDetails = ({ customer }) => {
 };
 
 const AddressBlock = ({ addressType, customer, disabled }) => {
+  let targetAddress =
+    customer && customer.addresses
+      ? customer.addresses.find((a) => a.type.toLowerCase() === addressType)
+      : null;
+
+  let targetCountry = targetAddress
+    ? countries.find((c) => c.code === targetAddress.country)
+    : null;
+
   return (
     <>
       <div className="col-span-2">
@@ -253,10 +323,12 @@ const AddressBlock = ({ addressType, customer, disabled }) => {
           name={`${addressType}_line1`}
           isRequired
           disabled={disabled}
+          defaultValue={targetAddress?.line1}
         />
       </div>
       <div className="col-span-2">
         <Input
+          defaultValue={targetAddress?.line2}
           placeholder="Line 2"
           id={`${addressType}_line2`}
           name={`${addressType}_line2`}
@@ -265,6 +337,7 @@ const AddressBlock = ({ addressType, customer, disabled }) => {
       </div>
       <div className="col-span-2">
         <Input
+          defaultValue={targetAddress?.line3}
           placeholder="Line 3"
           id={`${addressType}_line3`}
           name={`${addressType}_line3`}
@@ -274,6 +347,7 @@ const AddressBlock = ({ addressType, customer, disabled }) => {
       <div className="col-span-2 mt-3">
         <Input
           label="City"
+          defaultValue={targetAddress?.city}
           id={`${addressType}_city`}
           name={`${addressType}_city`}
           disabled={disabled}
@@ -282,6 +356,7 @@ const AddressBlock = ({ addressType, customer, disabled }) => {
       </div>
       <div className="col-span-2 mt-1">
         <Input
+          defaultValue={targetAddress?.state}
           label="State"
           id={`${addressType}_state`}
           name={`${addressType}_state`}
@@ -291,6 +366,7 @@ const AddressBlock = ({ addressType, customer, disabled }) => {
       </div>
       <div className="col-span-1 mt-1">
         <Input
+          defaultValue={targetAddress?.zipCode}
           label="Zip Code"
           isRequired
           id={`${addressType}_zip`}
@@ -304,6 +380,7 @@ const AddressBlock = ({ addressType, customer, disabled }) => {
           options={countries}
           by={"code"}
           labelKey={"name"}
+          value={targetCountry}
           isRequired
           id={`${addressType}_country`}
           name={`${addressType}_country`}
@@ -317,6 +394,7 @@ const AddressBlock = ({ addressType, customer, disabled }) => {
           id={`${addressType}_phoneNumber`}
           name={`${addressType}_phoneNumber`}
           disabled={disabled}
+          defaultValue={targetAddress?.phoneNumber}
         />
       </div>
     </>
@@ -333,11 +411,22 @@ const IdentificationDetails = ({ customer }) => {
         <h4 className="text-sm font-semibold">Identification Details</h4>
       </div>
       <div className="col-span-3">
-        <Input label="Aadhaar No." isRequired id="udid" name="udid" />
+        <Input
+          label="Aadhaar No."
+          isRequired
+          id="udid"
+          name="udid"
+          defaultValue={customer?.udid}
+        />
       </div>
       <div className="col-span-9"></div>
       <div className="col-span-3">
-        <Input label="Passport No." id="passportNo" name="passportNo" />
+        <Input
+          label="Passport No."
+          id="passportNo"
+          name="passportNo"
+          defaultValue={customer?.passport?.passportNumber}
+        />
       </div>
       <div className="col-span-3">
         <Input
@@ -345,6 +434,11 @@ const IdentificationDetails = ({ customer }) => {
           id="passportIssueDate"
           type="date"
           name="passportIssueDate"
+          defaultValue={
+            customer && customer.passport
+              ? formatDateForInput(customer.passport.issueDate)
+              : null
+          }
         />
       </div>
       <div className="col-span-3">
@@ -353,6 +447,11 @@ const IdentificationDetails = ({ customer }) => {
           id="passportExpiryDate"
           type="date"
           name="passportExpiryDate"
+          defaultValue={
+            customer && customer.passport
+              ? formatDateForInput(customer.passport.expiryDate)
+              : null
+          }
         />
       </div>
     </div>

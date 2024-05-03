@@ -33,6 +33,34 @@ export const createNewCustomer = async (customer) => {
   }
 };
 
+export const updateCustomer = async (id, customer) => {
+  const { passport, addresses, ...customerData } = customer;
+
+  try {
+    const updatedCustomer = await prisma.customer.update({
+      where: { id },
+      data: {
+        ...customerData,
+        addresses: {
+          deleteMany: {},
+          createMany: { data: addresses },
+        },
+      },
+    });
+
+    if (passport) {
+      await prisma.passport.update({
+        where: { customerId: id },
+        data: { ...passport },
+      });
+    }
+
+    return { ...updatedCustomer };
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const updateCustomerById = async (id, dataToUpdate) => {
   try {
     const updatedCustomer = await prisma.customer.update({
