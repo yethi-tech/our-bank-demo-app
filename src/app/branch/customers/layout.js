@@ -27,11 +27,12 @@ export default function TasksLayout({ children }) {
         }))}
         title="Customers"
         titleAction={
-          <IconButton
-            id="new_customer"
-            icon={<PlusIcon />}
-            title="New Customer"
-          />
+          // <IconButton
+          //   id="new_customer"
+          //   icon={<PlusIcon />}
+          //   title="New Customer"
+          // />
+          <></>
         }
       />
       <MainContent>{children}</MainContent>

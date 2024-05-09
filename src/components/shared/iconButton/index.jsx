@@ -1,6 +1,5 @@
-import React, { cloneElement } from "react";
 import PropTypes from "prop-types";
-import clsx from "clsx";
+import { cloneElement } from "react";
 
 const IconButton = ({ icon, size, variant, color, title, id }) => {
   return (
