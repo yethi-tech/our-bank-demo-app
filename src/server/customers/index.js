@@ -10,6 +10,7 @@ export const createNewCustomer = async (customer) => {
   });
 
   const customerId = `OB${customer.branchCode}${getNewSequence(count)}`;
+  console.log(`New customer ID: ${customerId}`);
   customerData.customerId = customerId;
 
   try {
