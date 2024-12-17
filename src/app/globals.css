@@ -20,7 +20,7 @@ body {
   height: 100vh;
 }
 
-.main {
+.main:not(hgroup) {
   height: calc(100vh - 48px);
   overflow: hidden;
 }
