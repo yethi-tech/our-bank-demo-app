@@ -65,7 +65,15 @@ export async function GET(request) {
     const page = parseInt(searchParams.get("page") ?? "1");
     const pageSize = parseInt(searchParams.get("pageSize") ?? 10);
 
-    const customers = await getCustomers(pageSize, page);
+    const include = "addresses,passport";
+
+    const customers = await getCustomers(
+      pageSize,
+      page,
+      { customerId: "asc" },
+      {},
+      include
+    );
     return NextResponse.json(customers.data);
   } catch (error) {
     console.error(error);

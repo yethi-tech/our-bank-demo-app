@@ -13,9 +13,21 @@ import {
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 
-export async function getCustomers(pageSize, currentPage, sort, criteria) {
+export async function getCustomers(
+  pageSize,
+  currentPage,
+  sort,
+  criteria,
+  include
+) {
   try {
-    const result = await searchCustomers(pageSize, currentPage, sort, criteria);
+    const result = await searchCustomers(
+      pageSize,
+      currentPage,
+      sort,
+      criteria,
+      include
+    );
     return { success: true, data: result };
   } catch (error) {
     return { success: false, message: error.message };

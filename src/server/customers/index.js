@@ -81,10 +81,21 @@ export const searchCustomers = async (
   sort = {
     firstName: "asc",
   },
-  filter = {}
+  filter = {},
+  includeFields = ""
 ) => {
   const skip = (page - 1) * limit;
   const where = buildCriteria(filter);
+
+  const includeArray = includeFields
+    .split(",")
+    .map((field) => field.trim())
+    .filter(Boolean);
+
+  const include = {};
+  includeArray.forEach((field) => {
+    include[field] = true;
+  });
 
   try {
     const customers = await prisma.customer.findMany({
@@ -92,6 +103,7 @@ export const searchCustomers = async (
       skip,
       orderBy: sort,
       where,
+      include,
     });
 
     const totalRecords = await prisma.customer.count();
@@ -152,6 +164,8 @@ const getNewSequence = (count) => {
 
 const buildCriteria = (filter) => {
   let where = {};
+
+  if (!filter) return where;
 
   Object.keys(filter).forEach((key) => {
     if (filter[key]) {
