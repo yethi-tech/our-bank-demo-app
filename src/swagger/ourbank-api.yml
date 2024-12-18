@@ -35,6 +35,19 @@ components:
           type: string
         message:
           type: string
+
+    CustomerSearchResponse:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+        totalPages:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Customer"
+
     Address:
       type: object
       required:
@@ -220,7 +233,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Customer"
+                  $ref: "#/components/schemas/CustomerSearchResponse"
         403:
           $ref: "#/components/responses/AccessForbiddenError"
         500:

@@ -4,7 +4,10 @@ const yaml = require("js-yaml");
 
 // Load the base OpenAPI spec
 const baseSpec = yaml.load(
-  fs.readFileSync(path.join(process.cwd(), "src/swagger/openapi.yaml"), "utf8")
+  fs.readFileSync(
+    path.join(process.cwd(), "src/swagger/ourbank-api.yml"),
+    "utf8"
+  )
 );
 
 // Combine everything
