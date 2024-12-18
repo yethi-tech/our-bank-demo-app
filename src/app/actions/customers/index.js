@@ -44,7 +44,7 @@ export async function getCustomerById(id) {
   }
 }
 
-export async function createCustomer(prevState, formData) {
+export async function processCreateCustomerForm(prevState, formData) {
   if (!formData) {
     return { success: false, message: null };
   }
@@ -72,69 +72,8 @@ export async function createCustomer(prevState, formData) {
     type,
   } = postedObject;
 
-  const customerToCreate = {
-    fullName,
-    prefix,
-    shortName: shortName.toUpperCase(),
-    branchCode,
-    firstName,
-    lastName,
-    middleName,
-    udid,
-    gender,
-    residentStatus,
-    type,
-    maker: session.user.userId,
-  };
-
-  try {
-    validateMandatoryFields(customerToCreate);
-  } catch (error) {
-    return { success: false, message: error };
-  }
-
-  if (!dateOfBirth) {
-    return { success: false, message: "Date of Birth is required" };
-  } else {
-    customerToCreate.dateOfBirth = new Date(dateOfBirth).toISOString();
-    customerToCreate.minor = isMinor(dateOfBirth);
-  }
-
-  const customerByShortName = await findByShortName(shortName);
-  if (customerByShortName) {
-    return { success: false, message: "This short name is already used" };
-  }
-
-  const customerByUdid = await findByUdid(udid);
-  if (customerByUdid) {
-    return { success: false, message: "This UDID is already used" };
-  }
-
-  try {
-    validatePassportInfo(postedObject, customerToCreate);
-    validateAddresses(postedObject, customerToCreate);
-  } catch (error) {
-    return {
-      success: false,
-      message: error.message || "An internal error occurred",
-    };
-  }
-
-  customerToCreate.authStatus = "Unauthorized";
-
-  console.log("Final Customer data: ", JSON.stringify(customerToCreate));
-
-  try {
-    let createdCustomer = await createNewCustomer(customerToCreate);
-    return {
-      success: true,
-      message:
-        "Customer created successfully with ID: " + createdCustomer.customerId,
-    };
-  } catch (error) {
-    console.error("ERROR creating customer", error);
-    return { success: false, message: "An internal error occurred." };
-  }
+  const response = await createCustomer(postedObject, session.user.userId);
+  return response;
 }
 
 export async function updateCustomer(prevState, formData) {
@@ -237,6 +176,88 @@ export async function updateCustomer(prevState, formData) {
     };
   } catch (error) {
     console.error("ERROR updating customer", error);
+    return { success: false, message: "An internal error occurred." };
+  }
+}
+
+export async function createCustomer(postedObject, createdBy) {
+  const {
+    fullName,
+    prefix,
+    shortName,
+    branchCode,
+    firstName,
+    middleName,
+    lastName,
+    udid,
+    gender,
+    dateOfBirth,
+    residentStatus,
+    type,
+  } = postedObject;
+
+  const customerToCreate = {
+    fullName,
+    prefix,
+    shortName: shortName.toUpperCase(),
+    branchCode,
+    firstName,
+    lastName,
+    middleName,
+    udid,
+    gender,
+    residentStatus,
+    type,
+    maker: createdBy,
+  };
+
+  try {
+    validateMandatoryFields(customerToCreate);
+  } catch (error) {
+    return { success: false, message: error };
+  }
+
+  if (!dateOfBirth) {
+    return { success: false, message: "Date of Birth is required" };
+  } else {
+    customerToCreate.dateOfBirth = new Date(dateOfBirth).toISOString();
+    customerToCreate.minor = isMinor(dateOfBirth);
+  }
+
+  const customerByShortName = await findByShortName(shortName);
+  if (customerByShortName) {
+    return { success: false, message: "This short name is already used" };
+  }
+
+  const customerByUdid = await findByUdid(udid);
+  if (customerByUdid) {
+    return { success: false, message: "This UDID is already used" };
+  }
+
+  try {
+    validatePassportInfo(postedObject, customerToCreate);
+    validateAddresses(postedObject, customerToCreate);
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message || "An internal error occurred",
+    };
+  }
+
+  customerToCreate.authStatus = "Unauthorized";
+
+  console.log("Final Customer data: ", JSON.stringify(customerToCreate));
+
+  try {
+    let createdCustomer = await createNewCustomer(customerToCreate);
+    return {
+      success: true,
+      message:
+        "Customer created successfully with ID: " + createdCustomer.customerId,
+      data: createdCustomer,
+    };
+  } catch (error) {
+    console.error("ERROR creating customer", error);
     return { success: false, message: "An internal error occurred." };
   }
 }

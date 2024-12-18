@@ -8,7 +8,10 @@ import Select from "@/components/shared/select";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { createCustomer, updateCustomer } from "@/app/actions/customers";
+import {
+  processCreateCustomerForm,
+  updateCustomer,
+} from "@/app/actions/customers";
 import AlertDialog from "../../alertDialog";
 
 function formatDateForInput(dateString) {
@@ -41,7 +44,7 @@ const countries = [
 const CustomerForm = ({ customer }) => {
   const router = useRouter();
   const [state, formAction] = useFormState(
-    customer ? updateCustomer : createCustomer,
+    customer ? updateCustomer : processCreateCustomerForm,
     initialState
   );
 
