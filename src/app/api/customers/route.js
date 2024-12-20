@@ -23,6 +23,33 @@ export const xmlToJson = (xml) => {
   return parser.parse(xml);
 };
 
+const getErrorResponse = (acceptHeader, errorMessage, statusCode) => {
+  if (acceptHeader !== MEDIA_TYPE_APPLICATION_XML) {
+    return NextResponse.json(
+      {
+        status: "error",
+        message: errorMessage || "An unexpected error occurred",
+      },
+      { status: statusCode }
+    );
+  }
+
+  const xmlWrapper = {
+    ServerError: {
+      status: "error",
+      message: errorMessage || "An unexpected error occurred",
+    },
+  };
+
+  const xmlResponse = jsonToXml(xmlWrapper);
+  return new NextResponse(xmlResponse, {
+    status: statusCode,
+    headers: {
+      "Content-Type": "application/xml",
+    },
+  });
+};
+
 // Example wrapper for your response data
 export const wrapCustomersResponse = (data) => {
   const { totalRecords, totalPages, data: customers } = data;
@@ -56,6 +83,8 @@ export const wrapCustomersResponse = (data) => {
 };
 
 export async function GET(request) {
+  const acceptHeader =
+    request.headers.get("accept") || MEDIA_TYPE_APPLICATION_JSON;
   try {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") ?? "1");
@@ -73,9 +102,6 @@ export async function GET(request) {
 
     const { success, data, message } = customers;
 
-    const acceptHeader =
-      request.headers.get("accept") || MEDIA_TYPE_APPLICATION_JSON;
-
     if (success) {
       if (acceptHeader !== MEDIA_TYPE_APPLICATION_XML) {
         return NextResponse.json(data);
@@ -91,23 +117,11 @@ export async function GET(request) {
         },
       });
     } else {
-      return NextResponse.json(
-        {
-          status: "error",
-          message,
-        },
-        { status: 500 }
-      );
+      return getErrorResponse(acceptHeader, message, 500);
     }
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      {
-        status: "error",
-        message: "Failed to fetch customers",
-      },
-      { status: 500 }
-    );
+    return getErrorResponse(acceptHeader, "Failed to Fetch Customers", 500);
   }
 }
 
