@@ -16,7 +16,19 @@ export async function GET(request) {
       {},
       include
     );
-    return NextResponse.json(customers.data);
+
+    const { success, data, message } = customers;
+    if (success) {
+      return NextResponse.json(data);
+    } else {
+      return NextResponse.json(
+        {
+          status: "error",
+          message,
+        },
+        { status: 500 }
+      );
+    }
   } catch (error) {
     console.error(error);
     return NextResponse.json(
