@@ -1,5 +1,59 @@
 import { createCustomer, getCustomers } from "@/app/actions/customers";
+import {
+  MEDIA_TYPE_APPLICATION_JSON,
+  MEDIA_TYPE_APPLICATION_XML,
+} from "@/utils/constants";
+import { XMLBuilder, XMLParser } from "fast-xml-parser";
 import { NextResponse } from "next/server";
+
+const xmlOptions = {
+  ignoreAttributes: false,
+  attributeNamePrefix: "@_",
+  format: true,
+  suppressEmptyNode: true,
+};
+
+export const jsonToXml = (data) => {
+  const builder = new XMLBuilder(xmlOptions);
+  return builder.build(data);
+};
+
+export const xmlToJson = (xml) => {
+  const parser = new XMLParser(xmlOptions);
+  return parser.parse(xml);
+};
+
+// Example wrapper for your response data
+export const wrapCustomersResponse = (data) => {
+  const { totalRecords, totalPages, data: customers } = data;
+
+  return {
+    CustomerSearchResponse: {
+      totalRecords,
+      totalPages,
+      Customers: {
+        Customer: customers.map((customer) => {
+          const { addresses, passport, ...restOfCustomer } = customer;
+          return {
+            ...restOfCustomer,
+            Addresses: addresses
+              ? {
+                  Address: addresses.map((addr) => ({
+                    ...addr,
+                  })),
+                }
+              : undefined,
+            Passport: passport
+              ? {
+                  ...passport,
+                }
+              : undefined,
+          };
+        }),
+      },
+    },
+  };
+};
 
 export async function GET(request) {
   try {
@@ -18,8 +72,24 @@ export async function GET(request) {
     );
 
     const { success, data, message } = customers;
+
+    const acceptHeader =
+      request.headers.get("accept") || MEDIA_TYPE_APPLICATION_JSON;
+
     if (success) {
-      return NextResponse.json(data);
+      if (acceptHeader !== MEDIA_TYPE_APPLICATION_XML) {
+        return NextResponse.json(data);
+      }
+
+      const wrappedData = wrapCustomersResponse(data);
+      const xmlResponse = jsonToXml(wrappedData);
+
+      return new NextResponse(xmlResponse, {
+        status: 200,
+        headers: {
+          "Content-Type": "application/xml",
+        },
+      });
     } else {
       return NextResponse.json(
         {
