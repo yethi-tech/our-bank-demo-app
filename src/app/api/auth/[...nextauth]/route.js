@@ -51,7 +51,7 @@ export const authOptions = {
 
       console.log("Inside session callback");
       if (token) {
-        // session.user.id = token.id;
+        session.user.id = Number(token.sub);
         session.user.userId = token.userId;
       }
 

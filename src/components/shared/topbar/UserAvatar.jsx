@@ -35,26 +35,13 @@ const UserAvatar = ({ onSignOut, user }) => {
           <Menu.Item>
             {({ active }) => (
               <a
-                href="#"
+                href="/me/api-keys"
                 className={classNames(
                   active ? "bg-gray-100" : "",
                   "block px-4 py-2 text-sm text-gray-700"
                 )}
               >
-                Your Profile
-              </a>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }) => (
-              <a
-                href="#"
-                className={classNames(
-                  active ? "bg-gray-100" : "",
-                  "block px-4 py-2 text-sm text-gray-700"
-                )}
-              >
-                Settings
+                API Keys
               </a>
             )}
           </Menu.Item>
