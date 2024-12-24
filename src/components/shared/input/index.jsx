@@ -8,13 +8,18 @@ const Input = ({
   label,
   id,
   name,
+  fullWidth,
   isRequired,
   placeholder,
   type = "text",
   ...rest
 }) => {
   return (
-    <div className="tjn_ui_control tjn_form_control w-full">
+    <div
+      className={clsx("tjn_ui_control tjn_form_control", {
+        "w-full": fullWidth,
+      })}
+    >
       <label
         htmlFor={id}
         className={clsx(

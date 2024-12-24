@@ -1,4 +1,5 @@
 import { getApiKeysForCurrentUser } from "@/app/actions/apiKeys";
+import ApiKeysList from "@/app/components/apiKeys/list";
 import NewApiKeyButton from "@/app/components/apiKeys/new";
 import Container from "@/components/shared/container";
 import PageHeader from "@/components/shared/pageHeader";
@@ -21,7 +22,9 @@ export default async function ApiKeys() {
             id="page_header"
             actions={[<NewApiKeyButton key={0} />]}
           />
-          <div>{keys.length} keys found</div>
+          <div className="grow">
+            <ApiKeysList keys={keys} />
+          </div>
         </div>
       </Container>
     </div>
