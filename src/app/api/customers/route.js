@@ -1,4 +1,5 @@
 import { createCustomer, getCustomers } from "@/app/actions/customers";
+import { getApiKey } from "@/server/apiKeys";
 import {
   MEDIA_TYPE_APPLICATION_JSON,
   MEDIA_TYPE_APPLICATION_XML,
@@ -82,9 +83,36 @@ export const wrapCustomersResponse = (data) => {
   };
 };
 
+const validateApiKey = async (request) => {
+  const authHeader = request.headers.get("Authorization");
+  if (!authHeader) {
+    throw new Error("Authorization header is missing");
+  }
+
+  const apiKey = authHeader.replace("Bearer ", "");
+  try {
+    const validKey = await getApiKey(apiKey);
+    return validKey.user;
+  } catch (error) {
+    console.error("Error validating API Key", error);
+    throw new Error();
+  }
+};
+
 export async function GET(request) {
   const acceptHeader =
     request.headers.get("accept") || MEDIA_TYPE_APPLICATION_JSON;
+
+  try {
+    await validateApiKey(request);
+  } catch (error) {
+    return getErrorResponse(
+      acceptHeader,
+      "You must be authenticated to access this resource",
+      401
+    );
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") ?? "1");
@@ -126,6 +154,16 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
+  let user = null;
+  try {
+    user = await validateApiKey(request);
+  } catch (error) {
+    return getErrorResponse(
+      "application/json",
+      "You must be authenticated to access this resource",
+      401
+    );
+  }
   try {
     const customerRequest = await request.json();
 
@@ -167,7 +205,7 @@ export async function POST(request) {
       dataToBeSubmitted.expiryDate = expiryDate;
     }
 
-    const response = await createCustomer(dataToBeSubmitted, "user1");
+    const response = await createCustomer(dataToBeSubmitted, user?.userId);
     if (response.success) {
       return NextResponse.json({
         id: response.data.id,

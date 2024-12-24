@@ -9,6 +9,17 @@ export const getApiKeysForUser = async (userId) => {
   });
 };
 
+export const getApiKey = async (keyString) => {
+  return prisma.apiKey.findFirst({
+    where: {
+      key: keyString,
+    },
+    include: {
+      user: true,
+    },
+  });
+};
+
 export const getApiKeyByUserIdAndName = async (userId, keyName) => {
   return prisma.apiKey.findFirst({
     where: {
