@@ -13,6 +13,7 @@ export const getApiKey = async (keyString) => {
   return prisma.apiKey.findFirst({
     where: {
       key: keyString,
+      revoked: false,
     },
     include: {
       user: true,
