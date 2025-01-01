@@ -4,6 +4,7 @@ import {
   MEDIA_TYPE_APPLICATION_JSON,
   MEDIA_TYPE_APPLICATION_XML,
 } from "@/utils/constants";
+import { data } from "autoprefixer";
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
 import { NextResponse } from "next/server";
 
@@ -174,6 +175,11 @@ export async function POST(request) {
       ...rest,
       permanentAddressSameAsContactAddress: false,
     };
+
+    //check if dataToBeSubmitted.udid is a number. If yes, convert it to a string
+    if (dataToBeSubmitted.udid && !isNaN(dataToBeSubmitted.udid)) {
+      dataToBeSubmitted.udid = dataToBeSubmitted.udid.toString();
+    }
 
     if (currentAddress) {
       const { line1, line2, line3, city, state, zipCode, phoneNumber } =
