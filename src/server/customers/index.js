@@ -114,6 +114,23 @@ export const searchCustomers = async (
   }
 };
 
+export const findByCustomerId = async (customerId) => {
+  try {
+    const record = await prisma.customer.findUnique({
+      where: {
+        customerId: customerId,
+      },
+      include: {
+        addresses: true,
+        passport: true,
+      },
+    });
+    return record;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const findByShortName = async (shortName) => {
   try {
     const record = await prisma.customer.findFirst({

@@ -8,6 +8,7 @@ import {
   findByUdid,
   searchCustomers,
   updateCustomerById,
+  findByCustomerId,
 } from "@/server/customers";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -31,6 +32,15 @@ export async function getCustomers(
     return { success: true, data: result };
   } catch (error) {
     return { success: false, message: error.message };
+  }
+}
+
+export async function getCustomerByCustomerId(customerId) {
+  try {
+    const result = await findByCustomerId(customerId);
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, data: error.message };
   }
 }
 

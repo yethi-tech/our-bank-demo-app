@@ -1,7 +1,10 @@
 import { getApiKey } from "@/server/apiKeys";
 import { NextResponse } from "next/server";
 import { jsonToXml } from "../route";
-import { getCustomerById } from "@/app/actions/customers";
+import {
+  getCustomerByCustomerId,
+  getCustomerById,
+} from "@/app/actions/customers";
 
 const validateApiKey = async (request) => {
   const authHeader = request.headers.get("Authorization");
@@ -61,7 +64,7 @@ export async function GET(request, { params }) {
   }
   try {
     const { id } = await params;
-    const searchResult = await getCustomerById(id);
+    const searchResult = await getCustomerByCustomerId(id);
     const { success, data: customer } = searchResult;
 
     if (success) {
