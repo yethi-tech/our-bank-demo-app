@@ -49,6 +49,7 @@ const MenuItem = ({ item }) => {
     </Menu>
   ) : (
     <a
+      data-testid={item.id}
       className={
         "relative flex items-center rounded-md bg-white hover:bg-gray-100 text-tenjin-primary text-sm px-3 py-2 font-semibold"
       }
