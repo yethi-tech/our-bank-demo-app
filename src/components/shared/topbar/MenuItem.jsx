@@ -6,7 +6,10 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 const MenuItem = ({ item }) => {
   return item.subItems ? (
     <Menu as="div" className="relative">
-      <Menu.Button className="relative font-semibold items-center flex rounded-md bg-white hover:bg-gray-100 text-tenjin-primary text-sm px-3 py-2 ">
+      <Menu.Button
+        data-testid={item.id}
+        className="relative font-semibold items-center flex rounded-md bg-white hover:bg-gray-100 text-tenjin-primary text-sm px-3 py-2 "
+      >
         {item.icon && (
           <span className="button-icon mr-2">
             {cloneElement(item.icon, { className: "w-5 h-5" })}
