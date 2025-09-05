@@ -176,7 +176,14 @@ export const findById = async (id) => {
 };
 
 const getNewSequence = (count) => {
-  return String(count + 1).padStart(6, "0");
+  //Generate current timestamp in YYYYMMDDHHMMSS format
+  const now = new Date();
+  const timestamp = now
+    .toISOString()
+    .replace(/[-T:.Z]/g, "")
+    .slice(0, 14);
+  // return String(count + 1).padStart(6, "0");
+  return timestamp;
 };
 
 const buildCriteria = (filter) => {
